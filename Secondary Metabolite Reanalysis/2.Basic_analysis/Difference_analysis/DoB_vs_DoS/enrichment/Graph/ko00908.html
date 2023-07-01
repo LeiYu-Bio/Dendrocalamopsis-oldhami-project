@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+ <!--
+ENTRY       map00908
+DEFINITION  Zeatin biosynthesis
+--->
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   KEGG PATHWAY: Zeatin biosynthesis + Reference pathway
+  </title>
+  <link href="/css/jquery-ui.css" rel="stylesheet"/>
+  <style type="text/css">
+   <!--
+
+h1.page-title {
+	font-size: 14px;
+	margin: 0px;
+	white-space: nowrap;
+}
+h1.page-title * {
+	vertical-align: middle;
+}
+
+input, select {
+	margin: 0px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/** navigation start **/
+.nav {
+	padding: 3px 0px 5px 0px;
+	position: relative;
+	min-width: 600px;
+	max-width: 800px;
+	background: #fff;
+}
+
+.nav form {
+	margin: 5px 0px 0px 0px;
+}
+
+.nav .help {
+	display: inline-block;
+	position: relative;
+	left: 20px;
+/*
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+*/
+}
+/** navigation end **/
+
+#description {
+	padding: 10px;
+	width: 800px;
+}
+
+#waiting-circle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	display: none;
+}
+
+#controlPanel {
+	top: 0px;
+	left: 0px;
+	width: 220px;
+	background: #ffffff;
+	padding: 0px 0px 0px 0px;
+	white-space: nowrap;
+	overflow: auto;
+	position: fixed;
+	border: solid 1px #999999;
+	display: none;
+}
+
+#controlPanel.closed {
+	border: none;
+	padding: 0px 0px 0px 0px;
+	background: transparent;
+
+	/* jQuery-UI resizale.disabled() の実行で
+	 *      色が薄くなるのを打ち消す */
+	opacity: 1.0;
+}
+
+/** div.row start **/
+
+div.row {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/* 以下のwidth,overflowの定義で.rowのブロック内で横スクロールする。 */
+	/*
+	width: 98%;
+	overflow: auto;
+	*/
+}
+
+div.row * {
+	vertical-align: middle;
+}
+
+/* 横に並べる場合(title可変幅) start */
+
+.row.scale input {
+	width: 110px;
+}
+
+.row.scale .label {
+	font-size: 0.9em;
+}
+
+/* 横に並べる場合(title可変幅) end */
+
+
+/* Search欄の検索結果 start */
+
+div.row.result > div {
+	margin: 5px 1px 2px 1px;
+}
+
+/* Search欄の検索結果 end */
+
+/**  div.row end **/
+
+#controlPanel h5 {
+  margin: 0px;
+	padding: 5px 0px 5px 10px;
+	vertical-align: middle;
+	border-top: solid 1px #cccccc;
+	border-bottom: solid 1px #cccccc;
+	background: #eeeeee;
+	/* ui-iconの位置調整のために必要 */
+	position: relative;
+}
+
+#controlPanel h5::before {
+	content: url(/Fig/get_htext/open.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5.closed::before {
+	content: url(/Fig/get_htext/close.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5:first-child {
+	border-top: none;
+}
+
+#controlPanel h5:hover {
+	cursor: pointer;
+}
+
+#controlPanel h5  + div {
+	padding: 5px 0px 5px 10px;
+}
+
+#controlPanel h5 .ui-icon {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	margin-top: -8px;
+	cursor: pointer;
+}
+
+button {
+	/* Safariでボタンの周りに入る余白を削除 */
+	margin: 0px;
+	padding: 0px;
+	/* ボタンを押した時に表示されるボーダーを非表示にする */
+	outline: none;
+}
+
+button.close, button.open {
+	border: none;
+	padding: 0px;
+	position: absolute;
+	right: 5px;
+	top: 7px;
+}
+
+button.close {
+	/* コントロールパネルに合わせて初期は非表示 */
+	display: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+button img {
+	/* 画像の下に入る余白を無くす */
+	display: block;
+}
+
+/** tree style start **/
+ul.tree, ul.tree ul {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.tree ul {
+	padding-left: 12px;
+}
+
+ul.tree .class-A > span {
+	font-weight: bold;
+}
+
+ul.tree li {
+	margin: 3px 0px 3px 0px;
+}
+
+.module-tree .module.disabled {
+	display: none;
+}
+
+.module-tree .classification.disabled {
+	display: none;
+}
+
+/** tree style > User data start **/
+ul.mappers {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.mappers li {
+	position: relative;
+	margin: 5px 0px 2px 0px;
+}
+
+ul.mappers li .ui-icon {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+}
+ul.mappers li .ui-icon:hover {
+	cursor: pointer;
+}
+ul.mappers li .ui-icon-trash {
+	right: 5px;
+}
+ul.mappers li .ui-icon-document {
+	right: 26px;
+}
+/** tree style > User data end **/
+
+/** tree style end **/
+
+.ui-icon.button {
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul.simple {
+	margin: 0px;
+	padding: 0px;
+}
+ul.simple li {
+	list-style-type: none;
+}
+ul.simple li:not(:first-child) {
+	margin-top: 5px;
+}
+
+//-->
+   body {font-size:12px; font-family:verdana,arial,helvetica,sans-serif; background-color:#ffffff}
+.text {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+b {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+th {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+td {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+input {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+select {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+a {text-decoration:none}
+a:link {color:#003399}
+a:visited {color:#003399}
+a:hover {color:#33cc99}
+font.title3 {color: #005050; font-size:14px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+hr.frame0 {border: 1px solid #f5e05f; color: #f5e05f}
+  </style>
+  <script src="/js/jquery-3.1.0.min.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/jquery.balloon.min.js">
+  </script>
+  <script src="/js/lz-string.min.js">
+  </script>
+  <script src="/kegg-bin/get_data.cgi?data=0021&amp;id=show_pathway.merged.js&amp;v2.09">
+  </script>
+  <script type="text/javascript">
+   <!--
+
+// common variable
+const env = {
+	       mapno: '00908',
+	         org: 'map',
+	       entry: 'map00908',
+	       scale: 1,
+	 colorModule: '',
+	personalConf: '',
+}
+
+// HELP button
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+
+//-->
+  </script>
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVR4AXSTA8wdQRSFv9q2bdu2bbth7QZF9ILatm3btvvbtnWS7D5/ye744szcbKdzzMnAhtVji/C7TUtE7VdvKfn8BmK+d3tckR1gY+XnOKLDMjS3T4g+ag3zdm3A8fD6k1GIFqNjSJg0kUk7AvXR9MwNev856mTIKQVx4Xx2jvfcgUCr2dQCBSAxMjdnVhRn561SSovsOCAPOqwD+hJTcvPtR3G1EAt5iyaT1CYvRupOBuruuYcwDk9/PIP3e3Pz719BKIhgVJcQDHLaaiCx5EGetPnowfK8u1uIfoUg9FEuvlHc5S2YNJ+ZbM5GeRTgwNpCLOl52pxXJLNHVdCHcNKgRo1YiAfyw8cLBRETh/rToE44TYfFmrm7jEDhG0jpXTWHU2VjRwyKlIlj5lRPdp/xszegMPQ1Cm1G3lzJ2HLCqxsSD7lJB0X34kthDKSf3TvQQ5Enbf72qzhKKW/OZDPOqKACXLYUci/imUelUP6iQd1wu4gSk3ObuojKteQXcqp4VDCh7fvxO8bC/csPOD54B7Z8e1cc3YArcqpgHPM+saUbewotpVZ4AkVeNOfPhcrktclbzCWE9TGTyYkD46o8QEb0BuZ79yEYE7uy3njrObSHTAAAAP//AwCnC723w5oqxAAAAABJRU5ErkJggg==" rel="icon" type="image/png"/>
+ </head>
+ <body>
+  <!-- header logo start -->
+  <!--
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+	<tr>
+		<td style="width:80px;">
+			<a href="/kegg/pathway.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+		</td>
+		<td style="vertical-align:middle;">
+			<font class="title3"><b>Zeatin biosynthesis - Reference pathway</b></font>
+		</td>
+		<td valign="bottom" align="right">
+		</td>
+	</tr>
+</table>
+-->
+  <h1 class="page-title">
+   <a href="https://www.genome.jp/kegg/pathway.html" target="_blank">
+    <img alt="KEGG" border="0" src="data: image/gif;base64,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"/>
+   </a>
+   Zeatin biosynthesis - Reference pathway
+  </h1>
+  <!-- header logo end -->
+  <!-- page navigation start -->
+  <div class="nav">
+   [
+   <a href="https://www.genome.jp/brite/query=00908&amp;htext=br08901.keg&amp;option=-a&amp;node_proc=br08901_org&amp;proc_enabled=map&amp;panel=collapse" id="navPathwayMenu" target="_blank">
+    Pathway menu
+   </a>
+   |
+   <a href="https://www.genome.jp/entry/pathway+map00908" id="navPathwayEntry" target="_blank">
+    Pathway entry
+   </a>
+   |
+   <a href="#description" id="descLink" target="_blank">
+    Show description
+   </a>
+   |
+   <a href="#" id="downloadImageLink" target="_blank">
+    Image file
+   </a>
+   |
+   <a href="https://www.genome.jp/kegg/document/help_pathway.html" target="_blank">
+    Help
+   </a>
+   ]
+   <div class="hidden" id="description">
+    Zeatin is a member of the cytokinin family, a class of phytohormones involved in various processes of growth and development in plants. Most abundant cytokinins are adenine-type, where the N6 position of adenine is substituted with an isoprenoid, such as in zeatin, or an aromatic side chain, such as in kinetin. Zeatin can be synthesized in two different pathways: the tRNA pathway and the AMP pathway. In the tRNA pathway zeatin is a recycled product of isopentenylated tRNAs. In the AMP pathway zeatin is synthesized from an isopentenyl donor, dimethylallyl diphosphate (DMAPP), and AMP, ADP, or ATP by isopentenyltransferases. After synthesis cytokinins can be glucosylated.
+   </div>
+   <!-- organism list start -->
+   <!-- organism list end -->
+  </div>
+  <!-- page navigation end -->
+  <!-- pathway image start -->
+  <div class="image-block" style="position:static;">
+   <img border="0" id="pathwayimage" src="ko00908.png" srcset="ko00908.png 1x" usemap="#mapdata" width="766"/>
+   <map data-scale="1" id="mapdata" name="mapdata">
+    <area class="original" coords="123,441,4" data-coords="123,441,4" data-entry="C00020" href="https://www.genome.jp/entry/C00020" id="DF6FCE75" shape="circle" target="_blank" title="C00020 (AMP)"/>
+    <area class="original" coords="123,343,4" data-coords="123,343,4" data-entry="C00008" href="https://www.genome.jp/entry/C00008" id="E16FC975" shape="circle" target="_blank" title="C00008 (ADP)"/>
+    <area class="original" coords="124,243,4" data-coords="124,243,4" data-entry="C00002" href="https://www.genome.jp/entry/C00002" id="E66FC475" shape="circle" target="_blank" title="C00002 (ATP)"/>
+    <area class="original" coords="541,637,4" data-coords="541,637,4" data-entry="C15546" href="https://www.genome.jp/entry/C15546" id="DB703CA2" shape="circle" target="_blank" title="C15546 (O-beta-D-Glucopyranosyl-cis-zeatin)"/>
+    <area class="original" coords="647,574,4" data-coords="647,574,4" data-entry="C15545" href="https://www.genome.jp/entry/C15545" id="F67050B6" shape="circle" target="_blank" title="C15545 (cis-Zeatin)"/>
+    <area class="original" coords="647,495,4" data-coords="647,495,4" data-entry="C16449" href="https://www.genome.jp/entry/C16449" id="F7704BC0" shape="circle" target="_blank" title="C16449 (cis-Zeatin riboside)"/>
+    <area class="original" coords="647,417,4" data-coords="647,417,4" data-entry="C16441" href="https://www.genome.jp/entry/C16441" id="F9704B98" shape="circle" target="_blank" title="C16441 (cis-Zeatin riboside monophosphate)"/>
+    <area class="original" coords="647,318,4" data-coords="647,318,4" data-entry="C16467" href="https://www.genome.jp/entry/C16467" id="FA704698" shape="circle" target="_blank" title="C16467 (cis-Prenyl-tRNA)"/>
+    <area class="original" coords="555,243,4" data-coords="555,243,4" data-entry="C17324" href="https://www.genome.jp/entry/C17324" id="EB7028C0" shape="circle" target="_blank" title="C17324 (tRNA adenine)"/>
+    <area class="original" coords="647,219,4" data-coords="647,219,4" data-entry="C04432" href="https://www.genome.jp/entry/C04432" id="FB704198" shape="circle" target="_blank" title="C04432 (tRNA containing 6-isopentenyladenosine)"/>
+    <area class="original" coords="541,219,4" data-coords="541,219,4" data-entry="C00235" href="https://www.genome.jp/entry/C00235" id="DD702898" shape="circle" target="_blank" title="C00235 (Dimethylallyl diphosphate)"/>
+    <area class="original" coords="507,417,4" data-coords="507,417,4" data-entry="C16445" href="https://www.genome.jp/entry/C16445" id="F9703234" shape="circle" target="_blank" title="C16445 (Dihydrozeatin riboside monophosphate)"/>
+    <area class="original" coords="507,495,4" data-coords="507,495,4" data-entry="C16447" href="https://www.genome.jp/entry/C16447" id="F770325C" shape="circle" target="_blank" title="C16447 (Dihydrozeatin riboside)"/>
+    <area class="original" coords="507,575,4" data-coords="507,575,4" data-entry="C02029" href="https://www.genome.jp/entry/C02029" id="F7703752" shape="circle" target="_blank" title="C02029 (Dihydrozeatin)"/>
+    <area class="original" coords="401,637,4" data-coords="401,637,4" data-entry="C16448" href="https://www.genome.jp/entry/C16448" id="DB70233E" shape="circle" target="_blank" title="C16448 (Dihydrozeatin-O-glucoside)"/>
+    <area class="original" coords="559,662,4" data-coords="559,662,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="FE703CCA" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="419,662,4" data-coords="419,662,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="FE702366" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="638,662,4" data-coords="638,662,4" data-entry="C00029" href="https://www.genome.jp/entry/C00029" id="F9705598" shape="circle" target="_blank" title="C00029 (UDP-glucose)"/>
+    <area class="original" coords="498,662,4" data-coords="498,662,4" data-entry="C00029" href="https://www.genome.jp/entry/C00029" id="F970242E" shape="circle" target="_blank" title="C00029 (UDP-glucose)"/>
+    <area class="original" coords="354,868,4" data-coords="354,868,4" data-entry="C00190" href="https://www.genome.jp/entry/C00190" id="EB7014CA" shape="circle" target="_blank" title="C00190 (UDP-D-xylose)"/>
+    <area class="original" coords="353,801,4" data-coords="353,801,4" data-entry="C00029" href="https://www.genome.jp/entry/C00029" id="DF7014AC" shape="circle" target="_blank" title="C00029 (UDP-glucose)"/>
+    <area class="original" coords="354,727,4" data-coords="354,727,4" data-entry="C00029" href="https://www.genome.jp/entry/C00029" id="EA700FB6" shape="circle" target="_blank" title="C00029 (UDP-glucose)"/>
+    <area class="original" coords="257,843,4" data-coords="257,843,4" data-entry="C03300" href="https://www.genome.jp/entry/C03300" id="F56FFBC0" shape="circle" target="_blank" title="C03300 (O-beta-D-Xylosylzeatin)"/>
+    <area class="original" coords="256,776,4" data-coords="256,776,4" data-entry="C16443" href="https://www.genome.jp/entry/C16443" id="F36FF6CF" shape="circle" target="_blank" title="C16443 (trans-Zeatin-7-beta-D-glucoside)"/>
+    <area class="original" coords="275,868,4" data-coords="275,868,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="F06FFBFC" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="274,801,4" data-coords="274,801,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="E46FFBDE" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="275,727,4" data-coords="275,727,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="EF6FF6E8" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="257,702,4" data-coords="257,702,4" data-entry="C03423" href="https://www.genome.jp/entry/C03423" id="F46FF6AC" shape="circle" target="_blank" title="C03423 (O-beta-D-Glucosylzeatin)"/>
+    <area class="original" coords="353,662,4" data-coords="353,662,4" data-entry="C00979" href="https://www.genome.jp/entry/C00979" id="E0700ACA" shape="circle" target="_blank" title="C00979 (O-Acetyl-L-serine)"/>
+    <area class="original" coords="274,662,4" data-coords="274,662,4" data-entry="C00033" href="https://www.genome.jp/entry/C00033" id="E56FF1FC" shape="circle" target="_blank" title="C00033 (Acetate)"/>
+    <area class="original" coords="256,637,4" data-coords="256,637,4" data-entry="C01513" href="https://www.genome.jp/entry/C01513" id="F46FF1BB" shape="circle" target="_blank" title="C01513 (Lupinate)"/>
+    <area class="original" coords="206,662,4" data-coords="206,662,4" data-entry="C00019" href="https://www.genome.jp/entry/C00019" id="EF6FF14D" shape="circle" target="_blank" title="C00019 (S-Adenosyl-L-methionine)"/>
+    <area class="original" coords="126,662,4" data-coords="126,662,4" data-entry="C00170" href="https://www.genome.jp/entry/C00170" id="EF6FD87F" shape="circle" target="_blank" title="C00170 (5'-Methylthioadenosine)"/>
+    <area class="original" coords="109,637,4" data-coords="109,637,4" data-entry="C01804" href="https://www.genome.jp/entry/C01804" id="036FD843" shape="circle" target="_blank" title="C01804 (Discadenine)"/>
+    <area class="original" coords="126,601,4" data-coords="126,601,4" data-entry="C07330" href="https://www.genome.jp/entry/C07330" id="EE6FD861" shape="circle" target="_blank" title="C07330 (3-Methyl-2-butenal)"/>
+    <area class="original" coords="111,575,4" data-coords="111,575,4" data-entry="C00147" href="https://www.genome.jp/entry/C00147" id="D96FD36B" shape="circle" target="_blank" title="C00147 (Adenine)"/>
+    <area class="original" coords="215,575,4" data-coords="215,575,4" data-entry="C04083" href="https://www.genome.jp/entry/C04083" id="ED6FEC6B" shape="circle" target="_blank" title="C04083 (N6-(Delta2-Isopentenyl)-adenine)"/>
+    <area class="original" coords="215,495,4" data-coords="215,495,4" data-entry="C16427" href="https://www.genome.jp/entry/C16427" id="ED6FE775" shape="circle" target="_blank" title="C16427 (Isopentenyl adenosine)"/>
+    <area class="original" coords="363,575,4" data-coords="363,575,4" data-entry="C00371" href="https://www.genome.jp/entry/C00371" id="E37005E8" shape="circle" target="_blank" title="C00371 (Zeatin)"/>
+    <area class="original" coords="363,495,4" data-coords="363,495,4" data-entry="C16431" href="https://www.genome.jp/entry/C16431" id="E37000F2" shape="circle" target="_blank" title="C16431 (trans-Zeatin riboside)"/>
+    <area class="original" coords="363,417,4" data-coords="363,417,4" data-entry="C16430" href="https://www.genome.jp/entry/C16430" id="E57000CA" shape="circle" target="_blank" title="C16430 (trans-Zeatin riboside monophosphate)"/>
+    <area class="original" coords="363,318,4" data-coords="363,318,4" data-entry="C16429" href="https://www.genome.jp/entry/C16429" id="E66FFBCA" shape="circle" target="_blank" title="C16429 (trans-Zeatin riboside diphosphate)"/>
+    <area class="original" coords="363,219,4" data-coords="363,219,4" data-entry="C16428" href="https://www.genome.jp/entry/C16428" id="E76FF6CA" shape="circle" target="_blank" title="C16428 (trans-Zeatin riboside triphosphate)"/>
+    <area class="original" coords="215,417,4" data-coords="215,417,4" data-entry="C04713" href="https://www.genome.jp/entry/C04713" id="EF6FE74D" shape="circle" target="_blank" title="C04713 (N6-(delta2-Isopentenyl)-adenosine 5'-monophosphate)"/>
+    <area class="original" coords="215,318,4" data-coords="215,318,4" data-entry="C16426" href="https://www.genome.jp/entry/C16426" id="F06FE24D" shape="circle" target="_blank" title="C16426 (Isopentenyladenosine-5'-diphosphate)"/>
+    <area class="original" coords="215,219,4" data-coords="215,219,4" data-entry="C16424" href="https://www.genome.jp/entry/C16424" id="F16FDD4D" shape="circle" target="_blank" title="C16424 (Isopentenyladenosine-5'-triphosphate)"/>
+    <area class="original" coords="108,417,4" data-coords="108,417,4" data-entry="C00235" href="https://www.genome.jp/entry/C00235" id="FE6FCE34" shape="circle" target="_blank" title="C00235 (Dimethylallyl diphosphate)"/>
+    <area class="original" coords="109,318,4" data-coords="109,318,4" data-entry="C00235" href="https://www.genome.jp/entry/C00235" id="046FC939" shape="circle" target="_blank" title="C00235 (Dimethylallyl diphosphate)"/>
+    <area class="original" coords="108,219,4" data-coords="108,219,4" data-entry="C00235" href="https://www.genome.jp/entry/C00235" id="006FC439" shape="circle" target="_blank" title="C00235 (Dimethylallyl diphosphate)"/>
+    <area class="original" coords="577,629,623,646" data-coords="577,629,623,646" href="https://www.genome.jp/entry/K13495+2.4.1.215+R07260" id="BC9AE016" shape="rect" target="_blank" title="K13495 (CISZOG), 2.4.1.215, R07260"/>
+    <area class="original" coords="646,223,646,313,648,313,648,223" data-coords="646,223,646,313,648,313,648,223" href="https://www.genome.jp/entry/R08077" id="1C18F588" shape="poly" target="_blank" title="R08077"/>
+    <area class="original" coords="646,322,646,412,648,412,648,322" data-coords="646,322,646,412,648,412,648,322" href="https://www.genome.jp/entry/R08078" id="02197788" shape="poly" target="_blank" title="R08078"/>
+    <area class="original" coords="646,421,646,490,648,490,648,421" data-coords="646,421,646,490,648,490,648,421" href="https://www.genome.jp/entry/R08079" id="E719F4AB" shape="poly" target="_blank" title="R08079"/>
+    <area class="original" coords="646,499,646,569,648,569,648,499" data-coords="646,499,646,569,648,569,648,499" href="https://www.genome.jp/entry/R08080" id="B819FD0C" shape="poly" target="_blank" title="R08080"/>
+    <area class="original" coords="367,494,502,494,502,496,367,496" data-coords="367,494,502,494,502,496,367,496" href="https://www.genome.jp/entry/R08067" id="37129099" shape="poly" target="_blank" title="R08067"/>
+    <area class="original" coords="506,500,506,570,508,570,508,500" data-coords="506,500,506,570,508,570,508,500" href="https://www.genome.jp/entry/R08074" id="CE17E17F" shape="poly" target="_blank" title="R08074"/>
+    <area class="original" coords="506,422,506,490,508,490,508,422" data-coords="506,422,506,490,508,490,508,422" href="https://www.genome.jp/entry/R08071" id="00176088" shape="poly" target="_blank" title="R08071"/>
+    <area class="original" coords="367,416,502,416,502,418,367,418" data-coords="367,416,502,416,502,418,367,418" href="https://www.genome.jp/entry/R08065" id="6B128C89" shape="poly" target="_blank" title="R08065"/>
+    <area class="original" coords="214,224,214,313,216,313,216,224" data-coords="214,224,214,313,216,313,216,224" href="https://www.genome.jp/entry/R08061" id="310EC5E5" shape="poly" target="_blank" title="R08061"/>
+    <area class="original" coords="362,224,362,313,364,313,364,224" data-coords="362,224,362,313,364,313,364,224" href="https://www.genome.jp/entry/R08063" id="2D115C92" shape="poly" target="_blank" title="R08063"/>
+    <area class="original" coords="214,323,214,412,216,412,216,323" data-coords="214,323,214,412,216,412,216,323" href="https://www.genome.jp/entry/R08062" id="170F47E5" shape="poly" target="_blank" title="R08062"/>
+    <area class="original" coords="362,323,362,412,364,412,364,323" data-coords="362,323,362,412,364,412,364,323" href="https://www.genome.jp/entry/R08064" id="1311DE92" shape="poly" target="_blank" title="R08064"/>
+    <area class="original" coords="214,422,214,490,216,490,216,422" data-coords="214,422,214,490,216,490,216,422" href="https://www.genome.jp/entry/R08069" id="FC0FC508" shape="poly" target="_blank" title="R08069"/>
+    <area class="original" coords="362,422,362,490,364,490,364,422" data-coords="362,422,362,490,364,490,364,422" href="https://www.genome.jp/entry/R08070" id="F8125BB5" shape="poly" target="_blank" title="R08070"/>
+    <area class="original" coords="219,494,358,494,358,496,219,496" data-coords="219,494,358,494,358,496,219,496" href="https://www.genome.jp/entry/R08066" id="4F0FE1E6" shape="poly" target="_blank" title="R08066"/>
+    <area class="original" coords="214,500,214,570,216,570,216,500" data-coords="214,500,214,570,216,570,216,500" href="https://www.genome.jp/entry/R08072" id="CA104604" shape="poly" target="_blank" title="R08072"/>
+    <area class="original" coords="362,500,362,570,364,570,364,500" data-coords="362,500,362,570,364,570,364,500" href="https://www.genome.jp/entry/R08073" id="C612DCB1" shape="poly" target="_blank" title="R08073"/>
+    <area class="original" coords="219,574,357,574,357,576,219,576" data-coords="219,574,357,574,357,576,219,576" href="https://www.genome.jp/entry/R08068" id="4A1062E2" shape="poly" target="_blank" title="R08068"/>
+    <area class="original" coords="434,629,480,646" data-coords="434,629,480,646" href="https://www.genome.jp/entry/K13496+K23452+R08076" id="3BB6564D" shape="rect" target="_blank" title="K13496 (UGT73C), K23452 (UGT85A), R08076"/>
+    <area class="original" coords="434,567,480,584" data-coords="434,567,480,584" href="https://www.genome.jp/entry/1.3.1.69+R05702" id="08B9D941" shape="rect" target="_blank" title="1.3.1.69, R05702"/>
+    <area class="original" coords="272,409,318,426" data-coords="272,409,318,426" href="https://www.genome.jp/entry/K10717+R08055" id="3A8BAB12" shape="rect" target="_blank" title="K10717 (CYP735A), R08055"/>
+    <area class="original" coords="272,310,318,327" data-coords="272,310,318,327" href="https://www.genome.jp/entry/K10717+R08054" id="588B2F8A" shape="rect" target="_blank" title="K10717 (CYP735A), R08054"/>
+    <area class="original" coords="143,409,189,426" data-coords="143,409,189,426" href="https://www.genome.jp/entry/K10760+2.5.1.27+R04038" id="ADAC37BF" shape="rect" target="_blank" title="K10760 (IPT), 2.5.1.27, R04038"/>
+    <area class="original" coords="143,310,189,327" data-coords="143,310,189,327" href="https://www.genome.jp/entry/K10760+2.5.1.112+R08052" id="CBABBC37" shape="rect" target="_blank" title="K10760 (IPT), 2.5.1.112, R08052"/>
+    <area class="original" coords="143,211,189,228" data-coords="143,211,189,228" href="https://www.genome.jp/entry/K10760+2.5.1.112+R08051" id="E3AB4037" shape="rect" target="_blank" title="K10760 (IPT), 2.5.1.112, R08051"/>
+    <area class="original" coords="272,211,318,228" data-coords="272,211,318,228" href="https://www.genome.jp/entry/K10717+R08053" id="708AB38A" shape="rect" target="_blank" title="K10717 (CYP735A), R08053"/>
+    <area class="original" coords="577,211,623,228" data-coords="577,211,623,228" href="https://www.genome.jp/entry/K00791+2.5.1.75+R01122" id="F096ED94" shape="rect" target="_blank" title="K00791 (miaA), 2.5.1.75, R01122"/>
+    <area class="original" coords="143,629,189,646" data-coords="143,629,189,646" href="https://www.genome.jp/entry/2.5.1.24+R03726" id="AFAF32B9" shape="rect" target="_blank" title="2.5.1.24, R03726"/>
+    <area class="original" coords="143,567,189,584" data-coords="143,567,189,584" href="https://www.genome.jp/entry/K00279+1.5.99.12+R05708" id="7CB2B5AD" shape="rect" target="_blank" title="K00279 (CKX), 1.5.99.12, R05708"/>
+    <area class="original" coords="293,835,339,852" data-coords="293,835,339,852" href="https://www.genome.jp/entry/K13494+2.4.2.40+R02119" id="579AA66B" shape="rect" target="_blank" title="K13494 (ZOX1), 2.4.2.40, R02119"/>
+    <area class="original" coords="293,694,339,711" data-coords="293,694,339,711" href="https://www.genome.jp/entry/K13492+2.4.1.203+R02118" id="3D95AE59" shape="rect" target="_blank" title="K13492 (ZOG1), 2.4.1.203, R02118"/>
+    <area class="original" coords="293,629,339,646" data-coords="293,629,339,646" href="https://www.genome.jp/entry/2.5.1.50+R03133" id="B998AFEE" shape="rect" target="_blank" title="2.5.1.50, R03133"/>
+    <area class="original" coords="292,768,338,785" data-coords="292,768,338,785" href="https://www.genome.jp/entry/K13493+R08075" id="249D28E2" shape="rect" target="_blank" title="K13493 (UGT76C1_2), R08075"/>
+    <area class="original" coords="40,45,221,70" data-coords="40,45,221,70" data-entry="map00908" href="https://www.genome.jp/entry/map00908" id="37B2ABC9" shape="rect" target="_blank" title="map00908: Zeatin biosynthesis"/>
+    <area class="original" coords="47,136,223,161" data-coords="47,136,223,161" data-entry="map00900" href="https://www.genome.jp/pathway/map00900" id="5DBB2991" shape="rect" target="_blank" title="map00900: Terpenoid backbone biosynthesis"/>
+   </map>
+   <map data-scale="1" id="module_mapdata" name="module_mapdata">
+   </map>
+  </div>
+  <!-- pathway image end -->
+  <!-- control panel start -->
+  <div id="controlPanel">
+   <div class="controller">
+    <div class="feature option">
+     <h5>
+      Option
+     </h5>
+     <div>
+      <div class="row scale">
+       <span class="title">
+        Scale:
+       </span>
+       <span class="content">
+        <input max="1" min="0.1" step="0.1" type="range" value="1"/>
+        <span class="label">
+         100%
+        </span>
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="feature search">
+     <h5>
+      Search
+     </h5>
+     <div>
+      <div class="row query">
+       <form>
+        <input autocomplete="off" name="query" style="width:130px;" type="text" value=""/>
+        <input type="submit" value="Go"/>
+        <span class="ui-icon button ui-icon-close clear-query hidden">
+        </span>
+       </form>
+      </div>
+      <div class="row result">
+      </div>
+     </div>
+    </div>
+    <div class="feature search-pathway">
+     <h5>
+      ID search
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <form>
+       <div class="row" style="display:grid; grid-template-columns:135px 1fr; column-gap:5px;">
+        <div>
+         <textarea class="query" rows="2" style="width:130px; resize:none;"></textarea>
+        </div>
+        <div>
+         <input class="submit" type="submit" value="Go"/>
+         <span class="ui-icon button ui-icon-close clear-query hidden">
+         </span>
+        </div>
+       </div>
+      </form>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature color-pathway">
+     <h5>
+      Color
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+   <button class="close">
+    <img src="/Fig/left_triangle_12x12.png"/>
+   </button>
+   <button class="open">
+    <img src="/Fig/right_triangle_12x12.png"/>
+   </button>
+  </div>
+  <!-- control panel end -->
+  <form action="/kegg-bin/download" id="downloadForm" method="post">
+   <input name="name" type="hidden" value="map00908.png"/>
+   <input name="content" type="hidden"/>
+   <input name="decode" type="hidden" value="base64"/>
+  </form>
+  <div id="waiting-circle">
+   <img src="/Fig/waiting-circle-small.gif"/>
+  </div>
+  <!-- pathway image url start -->
+  <form class="imageset" data-name="">
+   <input data-situation="1x" data-src="/kegg/pathway/map/map00908.png" name="image_normal" type="hidden" value="/kegg/pathway/map/map00908.png 1x"/>
+  </form>
+  <!-- pathway image url end -->
+ </body>
+</html>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+ <!--
+ENTRY       map00240
+DEFINITION  Pyrimidine metabolism
+--->
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   KEGG PATHWAY: Pyrimidine metabolism + Reference pathway
+  </title>
+  <link href="/css/jquery-ui.css" rel="stylesheet"/>
+  <style type="text/css">
+   <!--
+
+h1.page-title {
+	font-size: 14px;
+	margin: 0px;
+	white-space: nowrap;
+}
+h1.page-title * {
+	vertical-align: middle;
+}
+
+input, select {
+	margin: 0px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/** navigation start **/
+.nav {
+	padding: 3px 0px 5px 0px;
+	position: relative;
+	min-width: 600px;
+	max-width: 800px;
+	background: #fff;
+}
+
+.nav form {
+	margin: 5px 0px 0px 0px;
+}
+
+.nav .help {
+	display: inline-block;
+	position: relative;
+	left: 20px;
+/*
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+*/
+}
+/** navigation end **/
+
+#description {
+	padding: 10px;
+	width: 800px;
+}
+
+#waiting-circle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	display: none;
+}
+
+#controlPanel {
+	top: 0px;
+	left: 0px;
+	width: 220px;
+	background: #ffffff;
+	padding: 0px 0px 0px 0px;
+	white-space: nowrap;
+	overflow: auto;
+	position: fixed;
+	border: solid 1px #999999;
+	display: none;
+}
+
+#controlPanel.closed {
+	border: none;
+	padding: 0px 0px 0px 0px;
+	background: transparent;
+
+	/* jQuery-UI resizale.disabled() の実行で
+	 *      色が薄くなるのを打ち消す */
+	opacity: 1.0;
+}
+
+/** div.row start **/
+
+div.row {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/* 以下のwidth,overflowの定義で.rowのブロック内で横スクロールする。 */
+	/*
+	width: 98%;
+	overflow: auto;
+	*/
+}
+
+div.row * {
+	vertical-align: middle;
+}
+
+/* 横に並べる場合(title可変幅) start */
+
+.row.scale input {
+	width: 110px;
+}
+
+.row.scale .label {
+	font-size: 0.9em;
+}
+
+/* 横に並べる場合(title可変幅) end */
+
+
+/* Search欄の検索結果 start */
+
+div.row.result > div {
+	margin: 5px 1px 2px 1px;
+}
+
+/* Search欄の検索結果 end */
+
+/**  div.row end **/
+
+#controlPanel h5 {
+  margin: 0px;
+	padding: 5px 0px 5px 10px;
+	vertical-align: middle;
+	border-top: solid 1px #cccccc;
+	border-bottom: solid 1px #cccccc;
+	background: #eeeeee;
+	/* ui-iconの位置調整のために必要 */
+	position: relative;
+}
+
+#controlPanel h5::before {
+	content: url(/Fig/get_htext/open.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5.closed::before {
+	content: url(/Fig/get_htext/close.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5:first-child {
+	border-top: none;
+}
+
+#controlPanel h5:hover {
+	cursor: pointer;
+}
+
+#controlPanel h5  + div {
+	padding: 5px 0px 5px 10px;
+}
+
+#controlPanel h5 .ui-icon {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	margin-top: -8px;
+	cursor: pointer;
+}
+
+button {
+	/* Safariでボタンの周りに入る余白を削除 */
+	margin: 0px;
+	padding: 0px;
+	/* ボタンを押した時に表示されるボーダーを非表示にする */
+	outline: none;
+}
+
+button.close, button.open {
+	border: none;
+	padding: 0px;
+	position: absolute;
+	right: 5px;
+	top: 7px;
+}
+
+button.close {
+	/* コントロールパネルに合わせて初期は非表示 */
+	display: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+button img {
+	/* 画像の下に入る余白を無くす */
+	display: block;
+}
+
+/** tree style start **/
+ul.tree, ul.tree ul {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.tree ul {
+	padding-left: 12px;
+}
+
+ul.tree .class-A > span {
+	font-weight: bold;
+}
+
+ul.tree li {
+	margin: 3px 0px 3px 0px;
+}
+
+.module-tree .module.disabled {
+	display: none;
+}
+
+.module-tree .classification.disabled {
+	display: none;
+}
+
+/** tree style > User data start **/
+ul.mappers {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.mappers li {
+	position: relative;
+	margin: 5px 0px 2px 0px;
+}
+
+ul.mappers li .ui-icon {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+}
+ul.mappers li .ui-icon:hover {
+	cursor: pointer;
+}
+ul.mappers li .ui-icon-trash {
+	right: 5px;
+}
+ul.mappers li .ui-icon-document {
+	right: 26px;
+}
+/** tree style > User data end **/
+
+/** tree style end **/
+
+.ui-icon.button {
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul.simple {
+	margin: 0px;
+	padding: 0px;
+}
+ul.simple li {
+	list-style-type: none;
+}
+ul.simple li:not(:first-child) {
+	margin-top: 5px;
+}
+
+//-->
+   body {font-size:12px; font-family:verdana,arial,helvetica,sans-serif; background-color:#ffffff}
+.text {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+b {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+th {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+td {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+input {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+select {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+a {text-decoration:none}
+a:link {color:#003399}
+a:visited {color:#003399}
+a:hover {color:#33cc99}
+font.title3 {color: #005050; font-size:14px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+hr.frame0 {border: 1px solid #f5e05f; color: #f5e05f}
+  </style>
+  <script src="/js/jquery-3.1.0.min.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/jquery.balloon.min.js">
+  </script>
+  <script src="/js/lz-string.min.js">
+  </script>
+  <script src="/kegg-bin/get_data.cgi?data=0021&amp;id=show_pathway.merged.js&amp;v2.09">
+  </script>
+  <script type="text/javascript">
+   <!--
+
+// common variable
+const env = {
+	       mapno: '00240',
+	         org: 'map',
+	       entry: 'map00240',
+	       scale: 1,
+	 colorModule: '',
+	personalConf: '',
+}
+
+// HELP button
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+
+//-->
+  </script>
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVR4AXSTA8wdQRSFv9q2bdu2bbth7QZF9ILatm3btvvbtnWS7D5/ye744szcbKdzzMnAhtVji/C7TUtE7VdvKfn8BmK+d3tckR1gY+XnOKLDMjS3T4g+ag3zdm3A8fD6k1GIFqNjSJg0kUk7AvXR9MwNev856mTIKQVx4Xx2jvfcgUCr2dQCBSAxMjdnVhRn561SSovsOCAPOqwD+hJTcvPtR3G1EAt5iyaT1CYvRupOBuruuYcwDk9/PIP3e3Pz719BKIhgVJcQDHLaaiCx5EGetPnowfK8u1uIfoUg9FEuvlHc5S2YNJ+ZbM5GeRTgwNpCLOl52pxXJLNHVdCHcNKgRo1YiAfyw8cLBRETh/rToE44TYfFmrm7jEDhG0jpXTWHU2VjRwyKlIlj5lRPdp/xszegMPQ1Cm1G3lzJ2HLCqxsSD7lJB0X34kthDKSf3TvQQ5Enbf72qzhKKW/OZDPOqKACXLYUci/imUelUP6iQd1wu4gSk3ObuojKteQXcqp4VDCh7fvxO8bC/csPOD54B7Z8e1cc3YArcqpgHPM+saUbewotpVZ4AkVeNOfPhcrktclbzCWE9TGTyYkD46o8QEb0BuZ79yEYE7uy3njrObSHTAAAAP//AwCnC723w5oqxAAAAABJRU5ErkJggg==" rel="icon" type="image/png"/>
+ </head>
+ <body>
+  <!-- header logo start -->
+  <!--
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+	<tr>
+		<td style="width:80px;">
+			<a href="/kegg/pathway.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+		</td>
+		<td style="vertical-align:middle;">
+			<font class="title3"><b>Pyrimidine metabolism - Reference pathway</b></font>
+		</td>
+		<td valign="bottom" align="right">
+		</td>
+	</tr>
+</table>
+-->
+  <h1 class="page-title">
+   <a href="https://www.genome.jp/kegg/pathway.html" target="_blank">
+    <img alt="KEGG" border="0" src="data: image/gif;base64,R0lGODlhQQAuAPf/ADuLhIyLi+bl5cPOzBk7ONTm5AQZFwA7NYy6tgJsYrvLyhl0bUSNhRFtZK6rqw8fHSdYVO7x8RZLRnyrqPPz82CYk1iZk9DQ0Gmjnq7OywBVTeXo6OLm5m1zcvj6+gBeVSZ9dUBdW0VFRV1cXABCO/X09OLh4QBiWABmXYS2sufq6gBjWgBlXBRwafb29iuDe0lnZDRQTgEyLTp0bpqZmbvW0wBoXgJoX2Vsa/r8/EqTjbHSz/T392V2dNTT00mRiwxsYwBgVwJqYAE+ONvq6f39/SQ6OLq5udLl4wBRSTg9PRlXUgBiWs7NzV6hm19jY3+DgqbKxwVrYiwsLJrCvg9yah17ck2XkPDv7wBORiF4cK3Dwfr6+nx3dwBZUfb6+svJyfP39yZ7c+/v7wJnXgFGQN3d3cfb2hZ1bMjIyAYuKr29vQIpJQBgWD6CewNoYOzs7NnX1wBpYABrYgJtYwAkIAFIQgkuKgA3MQBqYPX5+EeQiQJrYkyTjAFqYPX5+QBnXsjKyf7+/vLx8f79/fn5+QFqYQFrYuTv7nuwq/T4+PP19eny8eLu7ez08/Hw8Pb5+ailpQJgWMTc2tnY2Njo5gJnXfb6+YGBgbW1tW6CgN7h4IaDhMC/v8DR0AVTTKW8upmUlPD19c/Y2BA0MExNTQpBPMXExOzz8iFOSSZQTYSzrztQTq6zsgJlXJSgn3CloHivqn2koaajo5ygoB9hWy96chJyafDy8gFcU4B+fiYwLi8vLglIQmlnZk6UjU1TUiV/d4mDhNLj4vP499Pn5J+8uQk1Me309M3QzwFjWgBXT0E9PfX4+CJwaP3+/sHb2DZtaMff3dbp5wRQSfj39/r5+dXV1aa4tlGUjsTY1peUlfn7+5abm2OBf5SnpaDHw5uqqbbAv/D29bPQzczLy1h9emmclwVoX7u8vJO/u1BqaO7t7XOGhNjn5hVyaWCemWtoaIqUkxdzawBqYaKfn8DBwMXCwwRNRbC3t7Wzs8ve3IKFhQBkWwJmXf///yH5BAEAAP8ALAAAAABBAC4AAAj/AP8JHEiwoMGDCBMqXMiwocOHECNKnEixosWFiX706aNDFpx/kxhs5CiOhxONIzf+sLDp4kMAJ/r1kzMk0j8dQWTaKDOCB5AVMoP2Q5EEh0uHe/r588dniD5GUlgsnWOgHLd5SpdqvaGhw9GGSZc2XRPlxFIhSUQ8+9Miqz8yN24IWeb168KwTA+0urJiaQI2Dv6xzUrmhJcPkrIYtasQL58D7apY8ncj1y4XgtsuPXQMk2ddmRg3ztrUFB+/MmgIHLw0z51qosFmFWJHw423Jx6wW63ZH01P04qJip0Qrz9JrsQe4DRQT29/b1iwkAPBBPGDxsloRfHAukDnbv2h/2BxSAaY6wazT/bHIkaR5s+18sHTBH1BvGRyJffnB98F+G4JIYcNdOBRjn0E4SVEGVkIsdQJPQC41A1lpAIBBEb4MBARVCCAQAaOiObYEKoksJQhdpjBW1b0sCEAF4VY8x4i8KCzQhBBrLCAOookFEYB5NTgznt3kXbAK8FIVViEmWWVhxqDEISEGCdIpVU/J7jBgUE5UAFCPyuswAIDNRSpXDqxmOWPIb0I0GRramAxECIN9KXVnSzUsttAl2TTDwsoLIUCUOfgUhxpQxxxBmFeyPOmP0/K+c8lVGpFBh9yWEnGCusQCUkfQdy5HRMzYIYdog7k8OVSfkjwiAfvOP8Zp0CJfLAVCnik4oxWh5AQxz/PWGCrVkIcot1bH2iCkGMk2JRCqJR50c1Vsso5zAqBvnVDHcIMcga0QmShWhTQipUFCR8c2yslBwHAAiCA0EFCPf8UsAK8gOQhwQZWyPrITWr6Q4cMXQgEzQeAyDFHECOggoZbCeAhQhzG3OaPEBoEcJA2MITgMStr/CPIFh5/nM8LspaACBPZYsyLqY6EAwMES5QBzAQQl8EMBSBN54chuSx2ECECET0QIUYLEsHDrd2xCALlJlDHPdJYUMlA1QjgwwC3aKqMAW7+w4g5S1CjgQZKWPRFb3KQogIAdmKsxCIvBCEFBu4QtEPACcj/EEojqyAj0COUXEOLPRaB1xoBo1SR1V9HZGAWCysAEQsiAumgZmEPDOLEB1pEEYZdivNHwBZCBEpGELvgAkC5lKPxjQr9+oXHNsMMhSUI4HxxVOl5EACKHIGi5cs/qFTg1g0fPDCAFNla8gAHVwTMQj8AKABb4r0Fr0BU0ULxDzG/KKMVHYAxMhRly5RSxD5uZPsWCwZ4VxHwpHAQTFYoOLMKCHZiShKmwI1KAIoyGuCHQDBgvqXQYQjxEMRFgKeGEqhjWP4AxJ+20g8DaCgMC8gKC2ZADgzc6QaSMMBHJtg9NVBAEZUSFWUSYACN0apcGgygJehQh1n8roVjEJsWwbB1JwGxQRcSFAgq6iRDB+JhBERiob8EMg5YtMEGeZCDHDRQhy48oyCVAELAlkIGefGiBF8pnR9ksAFucCMH/xiANyAgAQI84RQIKcAeVmADOQghASiQgQjC9kO3KGMeWtCCLZIhEAqMIUoK8QA2ovGJLAzBCMLYXhqfQ4brEeUJEimEDzqRBp6JpnQn7AqCJKKIN9jAD7CMZQLossqI5OAcJCiDLndZBjzUpZYPWUQaAkHMYhJTRcBMpjKXyUzGBAQAOw=="/>
+   </a>
+   Pyrimidine metabolism - Reference pathway
+  </h1>
+  <!-- header logo end -->
+  <!-- page navigation start -->
+  <div class="nav">
+   [
+   <a href="https://www.genome.jp/brite/query=00240&amp;htext=br08901.keg&amp;option=-a&amp;node_proc=br08901_org&amp;proc_enabled=map&amp;panel=collapse" id="navPathwayMenu" target="_blank">
+    Pathway menu
+   </a>
+   |
+   <a href="https://www.genome.jp/entry/pathway+map00240" id="navPathwayEntry" target="_blank">
+    Pathway entry
+   </a>
+   |
+   <a href="#" id="downloadImageLink" target="_blank">
+    Image file
+   </a>
+   |
+   <a href="https://www.genome.jp/kegg/document/help_pathway.html" target="_blank">
+    Help
+   </a>
+   ]
+   <!-- organism list start -->
+   <!-- organism list end -->
+  </div>
+  <!-- page navigation end -->
+  <!-- pathway image start -->
+  <div class="image-block" style="position:static;">
+   <img border="0" id="pathwayimage" src="ko00240.png" srcset="ko00240.png 1x" usemap="#mapdata" width="1437"/>
+   <map data-scale="1" id="mapdata" name="mapdata">
+    <area class="original" coords="128,297,4" data-coords="128,297,4" data-entry="C00064" href="https://www.genome.jp/entry/C00064" id="FE6FC48E" shape="circle" target="_blank" title="C00064 (L-Glutamine)"/>
+    <area class="original" coords="128,153,4" data-coords="128,153,4" data-entry="C00438" href="https://www.genome.jp/entry/C00438" id="FA6FBF7A" shape="circle" target="_blank" title="C00438 (N-Carbamoyl-L-aspartate)"/>
+    <area class="original" coords="128,225,4" data-coords="128,225,4" data-entry="C00169" href="https://www.genome.jp/entry/C00169" id="FC6FC46B" shape="circle" target="_blank" title="C00169 (Carbamoyl phosphate)"/>
+    <area class="original" coords="230,153,4" data-coords="230,153,4" data-entry="C00337" href="https://www.genome.jp/entry/C00337" id="D26FD893" shape="circle" target="_blank" title="C00337 ((S)-Dihydroorotate)"/>
+    <area class="original" coords="389,104,4" data-coords="389,104,4" data-entry="C00119" href="https://www.genome.jp/entry/C00119" id="006FF1FC" shape="circle" target="_blank" title="C00119 (5-Phospho-alpha-D-ribose 1-diphosphate)"/>
+    <area class="original" coords="473,153,4" data-coords="473,153,4" data-entry="C01103" href="https://www.genome.jp/entry/C01103" id="E1700AF7" shape="circle" target="_blank" title="C01103 (Orotidine 5'-phosphate)"/>
+    <area class="original" coords="334,236,4" data-coords="334,236,4" data-entry="C00075" href="https://www.genome.jp/entry/C00075" id="E96FF689" shape="circle" target="_blank" title="C00075 (UTP)"/>
+    <area class="original" coords="446,236,4" data-coords="446,236,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="F3700FA2" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="563,236,4" data-coords="563,236,4" data-entry="C00105" href="https://www.genome.jp/entry/C00105" id="E47028D4" shape="circle" target="_blank" title="C00105 (UMP)"/>
+    <area class="original" coords="693,236,4" data-coords="693,236,4" data-entry="C00299" href="https://www.genome.jp/entry/C00299" id="E470421F" shape="circle" target="_blank" title="C00299 (Uridine)"/>
+    <area class="original" coords="849,236,4" data-coords="849,236,4" data-entry="C00106" href="https://www.genome.jp/entry/C00106" id="027073A7" shape="circle" target="_blank" title="C00106 (Uracil)"/>
+    <area class="original" coords="248,409,4" data-coords="248,409,4" data-entry="C00046" href="https://www.genome.jp/entry/C00046" id="006FE798" shape="circle" target="_blank" title="C00046 (RNA)"/>
+    <area class="original" coords="334,410,4" data-coords="334,410,4" data-entry="C00063" href="https://www.genome.jp/entry/C00063" id="E370007F" shape="circle" target="_blank" title="C00063 (CTP)"/>
+    <area class="original" coords="248,872,4" data-coords="248,872,4" data-entry="C00039" href="https://www.genome.jp/entry/C00039" id="F96FFBB6" shape="circle" target="_blank" title="C00039 (DNA)"/>
+    <area class="original" coords="334,872,4" data-coords="334,872,4" data-entry="C00459" href="https://www.genome.jp/entry/C00459" id="E570149D" shape="circle" target="_blank" title="C00459 (dTTP)"/>
+    <area class="original" coords="450,872,4" data-coords="450,872,4" data-entry="C00363" href="https://www.genome.jp/entry/C00363" id="D1702DCF" shape="circle" target="_blank" title="C00363 (dTDP)"/>
+    <area class="original" coords="563,872,4" data-coords="563,872,4" data-entry="C00364" href="https://www.genome.jp/entry/C00364" id="E07046E8" shape="circle" target="_blank" title="C00364 (dTMP)"/>
+    <area class="original" coords="693,872,4" data-coords="693,872,4" data-entry="C00214" href="https://www.genome.jp/entry/C00214" id="E0706033" shape="circle" target="_blank" title="C00214 (Thymidine)"/>
+    <area class="original" coords="816,906,4" data-coords="816,906,4" data-entry="C00672" href="https://www.genome.jp/entry/C00672" id="F3709648" shape="circle" target="_blank" title="C00672 (2-Deoxy-D-ribose 1-phosphate)"/>
+    <area class="original" coords="980,794,4" data-coords="980,794,4" data-entry="C05281" href="https://www.genome.jp/entry/C05281" id="D370A624" shape="circle" target="_blank" title="C05281 (5-Methylbarbiturate)"/>
+    <area class="original" coords="1080,794,4" data-coords="1080,794,4" data-entry="C20846" href="https://www.genome.jp/entry/C20846" id="8EAF4334" shape="circle" target="_blank" title="C20846 (3-Oxo-3-ureidoisobutyrate)"/>
+    <area class="original" coords="756,794,4" data-coords="756,794,4" data-entry="C02376" href="https://www.genome.jp/entry/C02376" id="F17073D9" shape="circle" target="_blank" title="C02376 (5-Methylcytosine)"/>
+    <area class="original" coords="980,872,4" data-coords="980,872,4" data-entry="C21028" href="https://www.genome.jp/entry/C21028" id="D170AB1A" shape="circle" target="_blank" title="C21028 ((R)-5,6-Dihydrothymine)"/>
+    <area class="original" coords="1080,872,4" data-coords="1080,872,4" data-entry="C21029" href="https://www.genome.jp/entry/C21029" id="8CAF482A" shape="circle" target="_blank" title="C21029 ((R)-3-Ureidoisobutyrate)"/>
+    <area class="original" coords="1185,872,4" data-coords="1185,872,4" data-entry="C01205" href="https://www.genome.jp/entry/C01205" id="A5AF612A" shape="circle" target="_blank" title="C01205 ((R)-3-Amino-2-methylpropanoate)"/>
+    <area class="original" coords="693,411,4" data-coords="693,411,4" data-entry="C00475" href="https://www.genome.jp/entry/C00475" id="DF704C15" shape="circle" target="_blank" title="C00475 (Cytidine)"/>
+    <area class="original" coords="563,411,4" data-coords="563,411,4" data-entry="C00055" href="https://www.genome.jp/entry/C00055" id="DF7032CA" shape="circle" target="_blank" title="C00055 (CMP)"/>
+    <area class="original" coords="450,411,4" data-coords="450,411,4" data-entry="C00112" href="https://www.genome.jp/entry/C00112" id="D07019B1" shape="circle" target="_blank" title="C00112 (CDP)"/>
+    <area class="original" coords="450,817,4" data-coords="450,817,4" data-entry="C00015" href="https://www.genome.jp/entry/C00015" id="D6702DB1" shape="circle" target="_blank" title="C00015 (UDP)"/>
+    <area class="original" coords="336,724,4" data-coords="336,724,4" data-entry="C00460" href="https://www.genome.jp/entry/C00460" id="F1700F84" shape="circle" target="_blank" title="C00460 (dUTP)"/>
+    <area class="original" coords="450,723,4" data-coords="450,723,4" data-entry="C01346" href="https://www.genome.jp/entry/C01346" id="D27028B6" shape="circle" target="_blank" title="C01346 (dUDP)"/>
+    <area class="original" coords="563,723,4" data-coords="563,723,4" data-entry="C00365" href="https://www.genome.jp/entry/C00365" id="E17041CF" shape="circle" target="_blank" title="C00365 (dUMP)"/>
+    <area class="original" coords="693,569,4" data-coords="693,569,4" data-entry="C00881" href="https://www.genome.jp/entry/C00881" id="E770512E" shape="circle" target="_blank" title="C00881 (Deoxycytidine)"/>
+    <area class="original" coords="563,569,4" data-coords="563,569,4" data-entry="C00239" href="https://www.genome.jp/entry/C00239" id="E77037E3" shape="circle" target="_blank" title="C00239 (dCMP)"/>
+    <area class="original" coords="450,569,4" data-coords="450,569,4" data-entry="C00705" href="https://www.genome.jp/entry/C00705" id="D8701ECA" shape="circle" target="_blank" title="C00705 (dCDP)"/>
+    <area class="original" coords="334,569,4" data-coords="334,569,4" data-entry="C00458" href="https://www.genome.jp/entry/C00458" id="EC700598" shape="circle" target="_blank" title="C00458 (dCTP)"/>
+    <area class="original" coords="658,513,4" data-coords="658,513,4" data-entry="C03997" href="https://www.genome.jp/entry/C03997" id="FA7050B1" shape="circle" target="_blank" title="C03997 (5-Hydroxymethyldeoxycytidylate)"/>
+    <area class="original" coords="748,513,4" data-coords="748,513,4" data-entry="C11038" href="https://www.genome.jp/entry/C11038" id="FA706998" shape="circle" target="_blank" title="C11038 (2'-Deoxy-5-hydroxymethylcytidine-5'-diphosphate)"/>
+    <area class="original" coords="838,513,4" data-coords="838,513,4" data-entry="C11039" href="https://www.genome.jp/entry/C11039" id="FA70827F" shape="circle" target="_blank" title="C11039 (2'-Deoxy-5-hydroxymethylcytidine-5'-triphosphate)"/>
+    <area class="original" coords="347,153,4" data-coords="347,153,4" data-entry="C00295" href="https://www.genome.jp/entry/C00295" id="F56FF1AC" shape="circle" target="_blank" title="C00295 (Orotate)"/>
+    <area class="original" coords="720,166,4" data-coords="720,166,4" data-entry="C01368" href="https://www.genome.jp/entry/C01368" id="D570557F" shape="circle" target="_blank" title="C01368 (3'-UMP)"/>
+    <area class="original" coords="811,166,4" data-coords="811,166,4" data-entry="C02355" href="https://www.genome.jp/entry/C02355" id="DA706E66" shape="circle" target="_blank" title="C02355 (2',3'-Cyclic UMP)"/>
+    <area class="original" coords="492,484,4" data-coords="492,484,4" data-entry="C02354" href="https://www.genome.jp/entry/C02354" id="DD701A38" shape="circle" target="_blank" title="C02354 (2',3'-Cyclic CMP)"/>
+    <area class="original" coords="446,187,4" data-coords="446,187,4" data-entry="C06198" href="https://www.genome.jp/entry/C06198" id="F4700ABB" shape="circle" target="_blank" title="C06198 (P1,P4-Bis(5'-uridyl) tetraphosphate)"/>
+    <area class="original" coords="579,484,4" data-coords="579,484,4" data-entry="C05822" href="https://www.genome.jp/entry/C05822" id="0070330B" shape="circle" target="_blank" title="C05822 (3'-CMP)"/>
+    <area class="original" coords="1080,307,4" data-coords="1080,307,4" data-entry="C15607" href="https://www.genome.jp/entry/C15607" id="91AF2F07" shape="circle" target="_blank" title="C15607 (3-Oxo-3-ureidopropanoate)"/>
+    <area class="original" coords="1185,307,4" data-coords="1185,307,4" data-entry="C00383" href="https://www.genome.jp/entry/C00383" id="AAAF4807" shape="circle" target="_blank" title="C00383 (Malonate)"/>
+    <area class="original" coords="1164,344,4" data-coords="1164,344,4" data-entry="C00086" href="https://www.genome.jp/entry/C00086" id="A2AF47E9" shape="circle" target="_blank" title="C00086 (Urea)"/>
+    <area class="original" coords="980,307,4" data-coords="980,307,4" data-entry="C00813" href="https://www.genome.jp/entry/C00813" id="D67091F7" shape="circle" target="_blank" title="C00813 (Barbiturate)"/>
+    <area class="original" coords="1185,235,4" data-coords="1185,235,4" data-entry="C00099" href="https://www.genome.jp/entry/C00099" id="A8AF4316" shape="circle" target="_blank" title="C00099 (beta-Alanine)"/>
+    <area class="original" coords="1080,235,4" data-coords="1080,235,4" data-entry="C02642" href="https://www.genome.jp/entry/C02642" id="8FAF2A16" shape="circle" target="_blank" title="C02642 (3-Ureidopropionate)"/>
+    <area class="original" coords="980,235,4" data-coords="980,235,4" data-entry="C00429" href="https://www.genome.jp/entry/C00429" id="D4708D06" shape="circle" target="_blank" title="C00429 (5,6-Dihydrouracil)"/>
+    <area class="original" coords="961,180,4" data-coords="961,180,4" data-entry="C01168" href="https://www.genome.jp/entry/C01168" id="D47087ED" shape="circle" target="_blank" title="C01168 (Pseudouridine 5'-phosphate)"/>
+    <area class="original" coords="1061,180,4" data-coords="1061,180,4" data-entry="C02067" href="https://www.genome.jp/entry/C02067" id="8FAF24FD" shape="circle" target="_blank" title="C02067 (Pseudouridine)"/>
+    <area class="original" coords="991,468,4" data-coords="991,468,4" data-entry="C20231" href="https://www.genome.jp/entry/C20231" id="DC70972E" shape="circle" target="_blank" title="C20231 ((Z)-3-Ureidoacrylate peracid)"/>
+    <area class="original" coords="1089,468,4" data-coords="1089,468,4" data-entry="C20249" href="https://www.genome.jp/entry/C20249" id="BFAF3425" shape="circle" target="_blank" title="C20249 ((Z)-3-Peroxyaminoacrylate)"/>
+    <area class="original" coords="1070,439,4" data-coords="1070,439,4" data-entry="C01563" href="https://www.genome.jp/entry/C01563" id="93AF33FD" shape="circle" target="_blank" title="C01563 (Carbamate)"/>
+    <area class="original" coords="1271,468,4" data-coords="1271,468,4" data-entry="C00222" href="https://www.genome.jp/entry/C00222" id="97AF660C" shape="circle" target="_blank" title="C00222 (3-Oxopropanoate)"/>
+    <area class="original" coords="1362,468,4" data-coords="1362,468,4" data-entry="C01013" href="https://www.genome.jp/entry/C01013" id="9CAF7EF3" shape="circle" target="_blank" title="C01013 (3-Hydroxypropanoate)"/>
+    <area class="original" coords="1180,468,4" data-coords="1180,468,4" data-entry="C20253" href="https://www.genome.jp/entry/C20253" id="92AF4D25" shape="circle" target="_blank" title="C20253 (Aminoacrylate)"/>
+    <area class="original" coords="991,413,4" data-coords="991,413,4" data-entry="C20254" href="https://www.genome.jp/entry/C20254" id="D7709715" shape="circle" target="_blank" title="C20254 (Ureidoacrylate)"/>
+    <area class="original" coords="1185,794,4" data-coords="1185,794,4" data-entry="C02170" href="https://www.genome.jp/entry/C02170" id="A7AF5C34" shape="circle" target="_blank" title="C02170 (Methylmalonate)"/>
+    <area class="original" coords="1164,757,4" data-coords="1164,757,4" data-entry="C00086" href="https://www.genome.jp/entry/C00086" id="A5AF5BEE" shape="circle" target="_blank" title="C00086 (Urea)"/>
+    <area class="original" coords="248,570,4" data-coords="248,570,4" data-entry="C00039" href="https://www.genome.jp/entry/C00039" id="F76FECB6" shape="circle" target="_blank" title="C00039 (DNA)"/>
+    <area class="original" coords="693,723,4" data-coords="693,723,4" data-entry="C00526" href="https://www.genome.jp/entry/C00526" id="E1705B1A" shape="circle" target="_blank" title="C00526 (Deoxyuridine)"/>
+    <area class="original" coords="854,411,4" data-coords="854,411,4" data-entry="C00380" href="https://www.genome.jp/entry/C00380" id="E4707DB1" shape="circle" target="_blank" title="C00380 (Cytosine)"/>
+    <area class="original" coords="854,872,4" data-coords="854,872,4" data-entry="C00178" href="https://www.genome.jp/entry/C00178" id="E57091CF" shape="circle" target="_blank" title="C00178 (Thymine)"/>
+    <area class="original" coords="427,769,473,786" data-coords="427,769,473,786" href="https://www.genome.jp/entry/K00525+K00526+K10807+K10808+1.17.4.1+R02018" id="B3B5E1D5" shape="rect" target="_blank" title="K00525 (E1.17.4.1A), K00526 (E1.17.4.1B), K10807 (RRM1), K10808 (RRM2), 1.17.4.1, R02018"/>
+    <area class="original" coords="483,238,529,255" data-coords="483,238,529,255" href="https://www.genome.jp/entry/K09903+2.7.4.22+R00158" id="A6979AFA" shape="rect" target="_blank" title="K09903 (pyrH), 2.7.4.22, R00158"/>
+    <area class="original" coords="364,643,410,660" data-coords="364,643,410,660" href="https://www.genome.jp/entry/K09887+3.5.4.30+R07307" id="A592E795" shape="rect" target="_blank" title="K09887 (dcd), 3.5.4.30, R07307"/>
+    <area class="original" coords="565,788,611,805" data-coords="565,788,611,805" href="https://www.genome.jp/entry/K03465+2.1.1.148+R06613" id="AB92528E" shape="rect" target="_blank" title="K03465 (thyX), 2.1.1.148, R06613"/>
+    <area class="original" coords="105,255,151,272" data-coords="105,255,151,272" href="https://www.genome.jp/entry/K11540+K11541+K01954+K01955+K01956+6.3.5.5+R00575" id="41A10A71" shape="rect" target="_blank" title="K11540 (CAD), K11541 (URA2), K01954 (K01954), K01955 (carB), K01956 (carA), 6.3.5.5, R00575"/>
+    <area class="original" coords="105,183,151,200" data-coords="105,183,151,200" href="https://www.genome.jp/entry/K11540+K11541+K00609+K00610+K00608+2.1.3.2+R01397" id="0F998CE8" shape="rect" target="_blank" title="K11540 (CAD), K11541 (URA2), K00609 (pyrB), K00610 (pyrI), K00608 (pyrBI), 2.1.3.2, R01397"/>
+    <area class="original" coords="156,145,202,162" data-coords="156,145,202,162" href="https://www.genome.jp/entry/K11540+K01465+3.5.2.3+R01993" id="C2869E29" shape="rect" target="_blank" title="K11540 (CAD), K01465 (URA4), 3.5.2.3, R01993"/>
+    <area class="original" coords="267,126,313,143" data-coords="267,126,313,143" href="https://www.genome.jp/entry/K17828+K02823+1.3.1.14+R01869" id="5D8C16A5" shape="rect" target="_blank" title="K17828 (pyrDI), K02823 (pyrDII), 1.3.1.14, R01869"/>
+    <area class="original" coords="267,145,313,162" data-coords="267,145,313,162" href="https://www.genome.jp/entry/K00226+1.3.98.1+R01867" id="448E169F" shape="rect" target="_blank" title="K00226 (pyrD), 1.3.98.1, R01867"/>
+    <area class="original" coords="399,145,445,162" data-coords="399,145,445,162" href="https://www.genome.jp/entry/K13421+K00762+2.4.2.10+R01870" id="439F98F7" shape="rect" target="_blank" title="K13421 (UMPS), K00762 (pyrE), 2.4.2.10, R01870"/>
+    <area class="original" coords="372,228,418,245" data-coords="372,228,418,245" href="https://www.genome.jp/entry/K00940+K18533+2.7.4.6+R00156" id="248F220C" shape="rect" target="_blank" title="K00940 (ndk), K18533 (AK9), 2.7.4.6, R00156"/>
+    <area class="original" coords="483,217,529,234" data-coords="483,217,529,234" href="https://www.genome.jp/entry/K13800+K13809+2.7.4.14+R00158" id="8D959900" shape="rect" target="_blank" title="K13800 (CMPK1), K13809 (CMPK2), 2.7.4.14, R00158"/>
+    <area class="original" coords="311,310,357,327" data-coords="311,310,357,327" href="https://www.genome.jp/entry/K01937+6.3.4.2+R00571+R00573" id="DBA18CDF" shape="rect" target="_blank" title="K01937 (pyrG), 6.3.4.2, R00571, R00573"/>
+    <area class="original" coords="372,253,418,270" data-coords="372,253,418,270" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R00159" id="A7921E7E" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R00159"/>
+    <area class="original" coords="372,274,418,291" data-coords="372,274,418,291" href="https://www.genome.jp/entry/3.6.1.39+R00159" id="C0942078" shape="rect" target="_blank" title="3.6.1.39, R00159"/>
+    <area class="original" coords="483,175,529,192" data-coords="483,175,529,192" href="https://www.genome.jp/entry/K01511+K12304+K12305+3.6.1.6+R00155" id="5A9B1CEE" shape="rect" target="_blank" title="K01511 (ENTPD5_6), K12304 (CANT1), K12305 (ENTPD4), 3.6.1.6, R00155"/>
+    <area class="original" coords="483,196,529,213" data-coords="483,196,529,213" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R00155" id="74931EE8" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R00155"/>
+    <area class="original" coords="616,290,662,307" data-coords="616,290,662,307" href="https://www.genome.jp/entry/K00761+K02825+2.4.2.9+R00966" id="5BAB4DD6" shape="rect" target="_blank" title="K00761 (upp), K02825 (pyrR), 2.4.2.9, R00966"/>
+    <area class="original" coords="616,224,662,241" data-coords="616,224,662,241" href="https://www.genome.jp/entry/K00876+2.7.1.48+R00964+R00968" id="BEAF446B" shape="rect" target="_blank" title="K00876 (udk), 2.7.1.48, R00964, R00968"/>
+    <area class="original" coords="616,246,662,263" data-coords="616,246,662,263" href="https://www.genome.jp/entry/K01081+K19970+K11751+K03787+K02566+K08693+3.1.3.5+R00963" id="F0B14765" shape="rect" target="_blank" title="K01081 (E3.1.3.5), K19970 (NT5E), K11751 (ushA), K03787 (surE), K02566 (nagD), K08693 (yfkN), 3.1.3.5, R00963"/>
+    <area class="original" coords="745,234,791,251" data-coords="745,234,791,251" href="https://www.genome.jp/entry/K00757+2.4.2.3+R01876" id="46C1B83B" shape="rect" target="_blank" title="K00757 (udp), 2.4.2.3, R01876"/>
+    <area class="original" coords="745,256,791,273" data-coords="745,256,791,273" href="https://www.genome.jp/entry/K01240+K25589+3.2.2.3+R01080" id="78C3BB35" shape="rect" target="_blank" title="K01240 (URH1), K25589 (inuH), 3.2.2.3, R01080"/>
+    <area class="original" coords="372,393,418,410" data-coords="372,393,418,410" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R00569" id="A98C9D72" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R00569"/>
+    <area class="original" coords="372,412,418,429" data-coords="372,412,418,429" href="https://www.genome.jp/entry/K00940+K18533+2.7.4.6+R00570" id="908E1F8A" shape="rect" target="_blank" title="K00940 (ndk), K18533 (AK9), 2.7.4.6, R00570"/>
+    <area class="original" coords="483,368,529,385" data-coords="483,368,529,385" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R00514" id="A79B1971" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R00514"/>
+    <area class="original" coords="483,392,529,409" data-coords="483,392,529,409" href="https://www.genome.jp/entry/K13800+K13809+2.7.4.14+R00512" id="12931EE8" shape="rect" target="_blank" title="K13800 (CMPK1), K13809 (CMPK2), 2.7.4.14, R00512"/>
+    <area class="original" coords="616,341,662,358" data-coords="616,341,662,358" href="https://www.genome.jp/entry/K00876+2.7.1.48+R00513+R00517" id="74B0C965" shape="rect" target="_blank" title="K00876 (udk), 2.7.1.48, R00513, R00517"/>
+    <area class="original" coords="616,384,662,401" data-coords="616,384,662,401" href="https://www.genome.jp/entry/K01081+K19970+K11751+K03787+K02566+K08693+3.1.3.5+R00511" id="C0ABC459" shape="rect" target="_blank" title="K01081 (E3.1.3.5), K19970 (NT5E), K11751 (ushA), K03787 (surE), K02566 (nagD), K08693 (yfkN), 3.1.3.5, R00511"/>
+    <area class="original" coords="671,332,717,349" data-coords="671,332,717,349" href="https://www.genome.jp/entry/K01489+3.5.4.5+R01878" id="2196F184" shape="rect" target="_blank" title="K01489 (cdd), 3.5.4.5, R01878"/>
+    <area class="original" coords="831,332,877,349" data-coords="831,332,877,349" href="https://www.genome.jp/entry/K01485+K03365+3.5.4.1+R00974" id="26B9C9C0" shape="rect" target="_blank" title="K01485 (codA), K03365 (FCY1), 3.5.4.1, R00974"/>
+    <area class="original" coords="745,403,791,420" data-coords="745,403,791,420" href="https://www.genome.jp/entry/K10213+K01250+K12700+3.2.2.8+R02137" id="2FBFAFC4" shape="rect" target="_blank" title="K10213 (rihB), K01250 (rihA), K12700 (rihC), 3.2.2.8, R02137"/>
+    <area class="original" coords="616,446,662,463" data-coords="616,446,662,463" href="https://www.genome.jp/entry/K06966+3.2.2.10+R00510" id="F2B24165" shape="rect" target="_blank" title="K06966 (ppnN), 3.2.2.10, R00510"/>
+    <area class="original" coords="154,496,200,513" data-coords="154,496,200,513" href="https://www.genome.jp/entry/K00527+K00524+1.17.4.2+R02023" id="E5830E95" shape="rect" target="_blank" title="K00527 (rtpR), K00524 (nrdJ), 1.17.4.2, R02023"/>
+    <area class="original" coords="286,496,332,513" data-coords="286,496,332,513" href="https://www.genome.jp/entry/K00527+K00524+1.17.4.2+R02022" id="E49490ED" shape="rect" target="_blank" title="K00527 (rtpR), K00524 (nrdJ), 1.17.4.2, R02022"/>
+    <area class="original" coords="427,496,473,513" data-coords="427,496,473,513" href="https://www.genome.jp/entry/K00525+K00526+K10807+K10808+1.17.4.1+R02024" id="66AD694C" shape="rect" target="_blank" title="K00525 (E1.17.4.1A), K00526 (E1.17.4.1B), K10807 (RRM1), K10808 (RRM2), 1.17.4.1, R02024"/>
+    <area class="original" coords="372,561,418,578" data-coords="372,561,418,578" href="https://www.genome.jp/entry/K00940+K18533+2.7.4.6+R02326" id="78939DFB" shape="rect" target="_blank" title="K00940 (ndk), K18533 (AK9), 2.7.4.6, R02326"/>
+    <area class="original" coords="307,658,353,675" data-coords="307,658,353,675" href="https://www.genome.jp/entry/K01494+3.5.4.13+R02325" id="94A7ED76" shape="rect" target="_blank" title="K01494 (dcd), 3.5.4.13, R02325"/>
+    <area class="original" coords="483,550,529,567" data-coords="483,550,529,567" href="https://www.genome.jp/entry/K13800+K13809+2.7.4.14+R01665" id="E19A14EF" shape="rect" target="_blank" title="K13800 (CMPK1), K13809 (CMPK2), 2.7.4.14, R01665"/>
+    <area class="original" coords="578,505,624,522" data-coords="578,505,624,522" href="https://www.genome.jp/entry/K19796+2.1.2.8+R01669" id="D498631C" shape="rect" target="_blank" title="K19796 (gp42), 2.1.2.8, R01669"/>
+    <area class="original" coords="430,599,476,616" data-coords="430,599,476,616" href="https://www.genome.jp/entry/K16904+3.6.1.12+R01668" id="47ADFAAE" shape="rect" target="_blank" title="K16904 (DCTPP1), 3.6.1.12, R01668"/>
+    <area class="original" coords="616,605,662,622" data-coords="616,605,662,622" href="https://www.genome.jp/entry/K00893+K15519+2.7.1.74+R01666" id="DBAF3871" shape="rect" target="_blank" title="K00893 (DCK), K15519 (dck), 2.7.1.74, R01666"/>
+    <area class="original" coords="616,541,662,558" data-coords="616,541,662,558" href="https://www.genome.jp/entry/K01081+K19970+K11751+K03787+K02566+K08693+3.1.3.5+R01664" id="76B1C365" shape="rect" target="_blank" title="K01081 (E3.1.3.5), K19970 (NT5E), K11751 (ushA), K03787 (surE), K02566 (nagD), K08693 (yfkN), 3.1.3.5, R01664"/>
+    <area class="original" coords="540,630,586,647" data-coords="540,630,586,647" href="https://www.genome.jp/entry/K01493+3.5.4.12+R01663" id="6BB8E92C" shape="rect" target="_blank" title="K01493 (comEB), 3.5.4.12, R01663"/>
+    <area class="original" coords="372,706,418,723" data-coords="372,706,418,723" href="https://www.genome.jp/entry/K00940+K18533+2.7.4.6+R02331" id="F78F900D" shape="rect" target="_blank" title="K00940 (ndk), K18533 (AK9), 2.7.4.6, R02331"/>
+    <area class="original" coords="372,725,418,742" data-coords="372,725,418,742" href="https://www.genome.jp/entry/3.6.1.39+R02330" id="DE919007" shape="rect" target="_blank" title="3.6.1.39, R02330"/>
+    <area class="original" coords="483,714,529,731" data-coords="483,714,529,731" href="https://www.genome.jp/entry/K00943+2.7.4.9+R02098" id="47980700" shape="rect" target="_blank" title="K00943 (tmk), 2.7.4.9, R02098"/>
+    <area class="original" coords="616,758,662,775" data-coords="616,758,662,775" href="https://www.genome.jp/entry/K00857+2.7.1.21+R02099" id="27B4BAE7" shape="rect" target="_blank" title="K00857 (tdk), 2.7.1.21, R02099"/>
+    <area class="original" coords="670,630,716,647" data-coords="670,630,716,647" href="https://www.genome.jp/entry/K01489+3.5.4.5+R02485" id="7598617F" shape="rect" target="_blank" title="K01489 (cdd), 3.5.4.5, R02485"/>
+    <area class="original" coords="745,696,791,713" data-coords="745,696,791,713" href="https://www.genome.jp/entry/K00756+2.4.2.2+R02484" id="7DBFB129" shape="rect" target="_blank" title="K00756 (pdp), 2.4.2.2, R02484"/>
+    <area class="original" coords="745,734,791,751" data-coords="745,734,791,751" href="https://www.genome.jp/entry/K00758+2.4.2.4+R02484" id="4BC4293B" shape="rect" target="_blank" title="K00758 (deoA), 2.4.2.4, R02484"/>
+    <area class="original" coords="515,788,561,805" data-coords="515,788,561,805" href="https://www.genome.jp/entry/K00560+K13998+2.1.1.45+R02101" id="A6AB4659" shape="rect" target="_blank" title="K00560 (thyA), K13998 (DHFR-TS), 2.1.1.45, R02101"/>
+    <area class="original" coords="372,863,418,880" data-coords="372,863,418,880" href="https://www.genome.jp/entry/K00940+K18533+2.7.4.6+R02093" id="AD960CFB" shape="rect" target="_blank" title="K00940 (ndk), K18533 (AK9), 2.7.4.6, R02093"/>
+    <area class="original" coords="372,890,418,907" data-coords="372,890,418,907" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R02095" id="638E1572" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R02095"/>
+    <area class="original" coords="372,911,418,928" data-coords="372,911,418,928" href="https://www.genome.jp/entry/3.6.1.39+R02095" id="7C908F8A" shape="rect" target="_blank" title="3.6.1.39, R02095"/>
+    <area class="original" coords="483,854,529,871" data-coords="483,854,529,871" href="https://www.genome.jp/entry/K00943+2.7.4.9+R02094" id="489C85F4" shape="rect" target="_blank" title="K00943 (tmk), 2.7.4.9, R02094"/>
+    <area class="original" coords="483,873,529,890" data-coords="483,873,529,890" href="https://www.genome.jp/entry/K01510+K14641+K14642+3.6.1.5+R02092" id="2F9E85EE" shape="rect" target="_blank" title="K01510 (ENTPD1_3_8), K14641 (APY), K14642 (YND1), 3.6.1.5, R02092"/>
+    <area class="original" coords="616,844,662,861" data-coords="616,844,662,861" href="https://www.genome.jp/entry/K01081+K19970+K11751+K03787+K02566+K08693+3.1.3.5+R01569" id="C4B43365" shape="rect" target="_blank" title="K01081 (E3.1.3.5), K19970 (NT5E), K11751 (ushA), K03787 (surE), K02566 (nagD), K08693 (yfkN), 3.1.3.5, R01569"/>
+    <area class="original" coords="616,802,662,819" data-coords="616,802,662,819" href="https://www.genome.jp/entry/K00857+2.7.1.21+R01567" id="92AF3971" shape="rect" target="_blank" title="K00857 (tdk), 2.7.1.21, R01567"/>
+    <area class="original" coords="745,874,791,891" data-coords="745,874,791,891" href="https://www.genome.jp/entry/K00758+2.4.2.4+R01570" id="4CC8A82F" shape="rect" target="_blank" title="K00758 (deoA), 2.4.2.4, R01570"/>
+    <area class="original" coords="785,786,831,803" data-coords="785,786,831,803" href="https://www.genome.jp/entry/K01485+K03365+3.5.4.1+R01411" id="83A13770" shape="rect" target="_blank" title="K01485 (codA), K03365 (FCY1), 3.5.4.1, R01411"/>
+    <area class="original" coords="907,786,953,803" data-coords="907,786,953,803" href="https://www.genome.jp/entry/1.17.99.4+R01413" id="82B00FED" shape="rect" target="_blank" title="1.17.99.4, R01413"/>
+    <area class="original" coords="907,853,953,870" data-coords="907,853,953,870" href="https://www.genome.jp/entry/K17722+K17723+1.3.1.1+R11026" id="37B78876" shape="rect" target="_blank" title="K17722 (preT), K17723 (preA), 1.3.1.1, R11026"/>
+    <area class="original" coords="907,874,953,891" data-coords="907,874,953,891" href="https://www.genome.jp/entry/K00207+1.3.1.2+R01415" id="50B98A70" shape="rect" target="_blank" title="K00207 (DPYD), 1.3.1.2, R01415"/>
+    <area class="original" coords="1009,786,1055,803" data-coords="1009,786,1055,803" href="https://www.genome.jp/entry/K19794+3.5.2.1+R10777" id="FECD10BA" shape="rect" target="_blank" title="K19794 (bar), 3.5.2.1, R10777"/>
+    <area class="original" coords="1009,864,1055,881" data-coords="1009,864,1055,881" href="https://www.genome.jp/entry/K01464+3.5.2.2+R03055" id="FF5113C0" shape="rect" target="_blank" title="K01464 (DPYS), 3.5.2.2, R03055"/>
+    <area class="original" coords="1104,864,1150,881" data-coords="1104,864,1150,881" href="https://www.genome.jp/entry/K01431+K06016+3.5.1.6+R04666" id="06C1EE90" shape="rect" target="_blank" title="K01431 (UPB1), K06016 (pydC), 3.5.1.6, R04666"/>
+    <area class="original" coords="267,164,313,181" data-coords="267,164,313,181" href="https://www.genome.jp/entry/K00254+1.3.5.2+R01868" id="2B901699" shape="rect" target="_blank" title="K00254 (DHODH), 1.3.5.2, R01868"/>
+    <area class="original" coords="496,145,542,162" data-coords="496,145,542,162" href="https://www.genome.jp/entry/K13421+K01591+4.1.1.23+R00965" id="D1A1FAED" shape="rect" target="_blank" title="K13421 (UMPS), K01591 (pyrF), 4.1.1.23, R00965"/>
+    <area class="original" coords="671,186,717,203" data-coords="671,186,717,203" href="https://www.genome.jp/entry/K01119+K08693+K03787+3.1.3.6+R01877" id="8491F3F5" shape="rect" target="_blank" title="K01119 (cpdB), K08693 (yfkN), K03787 (surE), 3.1.3.6, R01877"/>
+    <area class="original" coords="745,158,791,175" data-coords="745,158,791,175" href="https://www.genome.jp/entry/K01119+K08693+K09769+K24670+3.1.4.16+R03538" id="A9C34035" shape="rect" target="_blank" title="K01119 (cpdB), K08693 (yfkN), K09769 (ymdB), K24670 (K24670), 3.1.4.16, R03538"/>
+    <area class="original" coords="430,279,476,296" data-coords="430,279,476,296" href="https://www.genome.jp/entry/K01513+K04765+3.6.1.9+R00662" id="43B482B4" shape="rect" target="_blank" title="K01513 (ENPP1_3), K04765 (mazG), 3.6.1.9, R00662"/>
+    <area class="original" coords="629,476,675,493" data-coords="629,476,675,493" href="https://www.genome.jp/entry/K01119+K08693+K03787+3.1.3.6+R02370" id="69BA5457" shape="rect" target="_blank" title="K01119 (cpdB), K08693 (yfkN), K03787 (surE), 3.1.3.6, R02370"/>
+    <area class="original" coords="508,476,554,493" data-coords="508,476,554,493" href="https://www.genome.jp/entry/K01119+K08693+K09769+K24670+3.1.4.16+R03929" id="E7ADD970" shape="rect" target="_blank" title="K01119 (cpdB), K08693 (yfkN), K09769 (ymdB), K24670 (K24670), 3.1.4.16, R03929"/>
+    <area class="original" coords="370,180,416,197" data-coords="370,180,416,197" href="https://www.genome.jp/entry/K01518+3.6.1.17+R00969" id="61939FF0" shape="rect" target="_blank" title="K01518 (NUDT2), 3.6.1.17, R00969"/>
+    <area class="original" coords="745,715,791,732" data-coords="745,715,791,732" href="https://www.genome.jp/entry/K00757+2.4.2.3+R02484" id="64C22941" shape="rect" target="_blank" title="K00757 (udp), 2.4.2.3, R02484"/>
+    <area class="original" coords="616,696,662,713" data-coords="616,696,662,713" href="https://www.genome.jp/entry/K01081+K19970+K11751+K03787+K02566+K08693+3.1.3.5+R02102" id="F5AE3DD6" shape="rect" target="_blank" title="K01081 (E3.1.3.5), K19970 (NT5E), K11751 (ushA), K03787 (surE), K02566 (nagD), K08693 (yfkN), 3.1.3.5, R02102"/>
+    <area class="original" coords="616,863,662,880" data-coords="616,863,662,880" href="https://www.genome.jp/entry/K07023+K08722+K06952+3.1.3.89+R01569" id="ABB6335F" shape="rect" target="_blank" title="K07023 (YGK1), K08722 (yfbR), K06952 (yfdR), 3.1.3.89, R01569"/>
+    <area class="original" coords="677,505,723,522" data-coords="677,505,723,522" href="https://www.genome.jp/entry/K19797+2.7.4.12+R00140" id="5C9ACF1C" shape="rect" target="_blank" title="K19797 (gp1), 2.7.4.12, R00140"/>
+    <area class="original" coords="767,504,813,521" data-coords="767,504,813,521" href="https://www.genome.jp/entry/K00940+2.7.4.6+R00139" id="48983CAB" shape="rect" target="_blank" title="K00940 (ndk), 2.7.4.6, R00139"/>
+    <area class="original" coords="616,560,662,577" data-coords="616,560,662,577" href="https://www.genome.jp/entry/K07023+K08722+K06952+3.1.3.89+R01664" id="5DB3C35F" shape="rect" target="_blank" title="K07023 (YGK1), K08722 (yfbR), K06952 (yfdR), 3.1.3.89, R01664"/>
+    <area class="original" coords="616,715,662,732" data-coords="616,715,662,732" href="https://www.genome.jp/entry/K07023+K08722+K06952+3.1.3.89+R02102" id="DCB0B5EE" shape="rect" target="_blank" title="K07023 (YGK1), K08722 (yfbR), K06952 (yfdR), 3.1.3.89, R02102"/>
+    <area class="original" coords="1104,298,1150,315" data-coords="1104,298,1150,315" href="https://www.genome.jp/entry/K19795+3.5.1.95+R07629" id="FECE6B7F" shape="rect" target="_blank" title="K19795 (E3.5.1.95), 3.5.1.95, R07629"/>
+    <area class="original" coords="907,216,953,233" data-coords="907,216,953,233" href="https://www.genome.jp/entry/K17722+K17723+1.3.1.1+R00977" id="7CB09B82" shape="rect" target="_blank" title="K17722 (preT), K17723 (preA), 1.3.1.1, R00977"/>
+    <area class="original" coords="907,237,953,254" data-coords="907,237,953,254" href="https://www.genome.jp/entry/K00207+1.3.1.2+R00978" id="95B29D7C" shape="rect" target="_blank" title="K00207 (DPYD), 1.3.1.2, R00978"/>
+    <area class="original" coords="1009,227,1055,244" data-coords="1009,227,1055,244" href="https://www.genome.jp/entry/K01464+3.5.2.2+R02269" id="F65D2437" shape="rect" target="_blank" title="K01464 (DPYS), 3.5.2.2, R02269"/>
+    <area class="original" coords="1104,227,1150,244" data-coords="1104,227,1150,244" href="https://www.genome.jp/entry/K01431+K06016+3.5.1.6+R00905" id="FDCDFF02" shape="rect" target="_blank" title="K01431 (UPB1), K06016 (pydC), 3.5.1.6, R00905"/>
+    <area class="original" coords="907,298,953,315" data-coords="907,298,953,315" href="https://www.genome.jp/entry/1.17.99.4+R00976" id="AFAEA16A" shape="rect" target="_blank" title="1.17.99.4, R00976"/>
+    <area class="original" coords="1009,299,1055,316" data-coords="1009,299,1055,316" href="https://www.genome.jp/entry/K19794+3.5.2.1+R02139" id="F75D9231" shape="rect" target="_blank" title="K19794 (bar), 3.5.2.1, R02139"/>
+    <area class="original" coords="881,172,927,189" data-coords="881,172,927,189" href="https://www.genome.jp/entry/K16329+K16330+4.2.1.70+R01055" id="29A3DDE9" shape="rect" target="_blank" title="K16329 (psuG), K16330 (K16330), 4.2.1.70, R01055"/>
+    <area class="original" coords="990,172,1036,189" data-coords="990,172,1036,189" href="https://www.genome.jp/entry/K16328+K16330+2.7.1.83+R03315" id="953C99A4" shape="rect" target="_blank" title="K16328 (psuK), K16330 (K16330), 2.7.1.83, R03315"/>
+    <area class="original" coords="918,460,964,477" data-coords="918,460,964,477" href="https://www.genome.jp/entry/K09018+K09024+1.14.99.46+R09936" id="65BAA364" shape="rect" target="_blank" title="K09018 (rutA), K09024 (rutF), 1.14.99.46, R09936"/>
+    <area class="original" coords="1013,460,1059,477" data-coords="1013,460,1059,477" href="https://www.genome.jp/entry/K09020+3.5.1.110+R09947" id="F95E8E26" shape="rect" target="_blank" title="K09020 (rutB), 3.5.1.110, R09947"/>
+    <area class="original" coords="1290,449,1336,466" data-coords="1290,449,1336,466" href="https://www.genome.jp/entry/K16066+R09289" id="0D48093D" shape="rect" target="_blank" title="K16066 (ydfG), R09289"/>
+    <area class="original" coords="1108,460,1154,477" data-coords="1108,460,1154,477" href="https://www.genome.jp/entry/K09021+R09982" id="00CD1060" shape="rect" target="_blank" title="K09021 (rutC), R09982"/>
+    <area class="original" coords="1199,460,1245,477" data-coords="1199,460,1245,477" href="https://www.genome.jp/entry/K09023+R09983" id="05DE10D1" shape="rect" target="_blank" title="K09023 (rutD), R09983"/>
+    <area class="original" coords="1290,470,1336,487" data-coords="1290,470,1336,487" href="https://www.genome.jp/entry/K09019+R09289" id="0D4B7CD8" shape="rect" target="_blank" title="K09019 (rutE), R09289"/>
+    <area class="original" coords="990,464,990,419,992,419,992,464" data-coords="990,464,990,419,992,419,992,464" href="https://www.genome.jp/entry/R09981" id="2F21A11F" shape="poly" target="_blank" title="R09981"/>
+    <area class="original" coords="1013,405,1059,422" data-coords="1013,405,1059,422" href="https://www.genome.jp/entry/K09020+3.5.1.110+R09980" id="F9569D97" shape="rect" target="_blank" title="K09020 (rutB), 3.5.1.110, R09980"/>
+    <area class="original" coords="1104,786,1150,803" data-coords="1104,786,1150,803" href="https://www.genome.jp/entry/K19795+3.5.1.95+R10778" id="063DEB8A" shape="rect" target="_blank" title="K19795 (E3.5.1.95), 3.5.1.95, R10778"/>
+    <area class="original" coords="430,914,476,931" data-coords="430,914,476,931" href="https://www.genome.jp/entry/K01513+K04765+3.6.1.9+R11323" id="CDB1E5C1" shape="rect" target="_blank" title="K01513 (ENPP1_3), K04765 (mazG), 3.6.1.9, R11323"/>
+    <area class="original" coords="430,333,476,350" data-coords="430,333,476,350" href="https://www.genome.jp/entry/K01513+K04765+3.6.1.9+R00515" id="AEB0F7BB" shape="rect" target="_blank" title="K01513 (ENPP1_3), K04765 (mazG), 3.6.1.9, R00515"/>
+    <area class="original" coords="430,673,476,690" data-coords="430,673,476,690" href="https://www.genome.jp/entry/K01520+3.6.1.23+R02100" id="B1B670AF" shape="rect" target="_blank" title="K01520 (dut), 3.6.1.23, R02100"/>
+    <area class="original" coords="483,571,529,588" data-coords="483,571,529,588" href="https://www.genome.jp/entry/K00945+K13799+2.7.4.25+R01665" id="FA9C16E9" shape="rect" target="_blank" title="K00945 (cmk), K13799 (panC-cmk), 2.7.4.25, R01665"/>
+    <area class="original" coords="483,413,529,430" data-coords="483,413,529,430" href="https://www.genome.jp/entry/K00945+K13799+2.7.4.25+R00512" id="2B968F00" shape="rect" target="_blank" title="K00945 (cmk), K13799 (panC-cmk), 2.7.4.25, R00512"/>
+    <area class="original" coords="204,496,250,513" data-coords="204,496,250,513" href="https://www.genome.jp/entry/K21636+1.1.98.6+R11635" id="E59E7360" shape="rect" target="_blank" title="K21636 (nrdD), 1.1.98.6, R11635"/>
+    <area class="original" coords="336,496,382,513" data-coords="336,496,382,513" href="https://www.genome.jp/entry/K21636+1.1.98.6+R11636" id="E4AFF5B8" shape="rect" target="_blank" title="K21636 (nrdD), 1.1.98.6, R11636"/>
+    <area class="original" coords="616,362,662,379" data-coords="616,362,662,379" href="https://www.genome.jp/entry/K21057+K22026+2.7.1.213+R00513" id="8DB2CB5F" shape="rect" target="_blank" title="K21057 (E2.7.1.213), K22026 (K22026), 2.7.1.213, R00513"/>
+    <area class="original" coords="616,626,662,643" data-coords="616,626,662,643" href="https://www.genome.jp/entry/K05961+2.7.1.145+R01666" id="F4B13A6B" shape="rect" target="_blank" title="K05961 (dnk), 2.7.1.145, R01666"/>
+    <area class="original" coords="616,779,662,796" data-coords="616,779,662,796" href="https://www.genome.jp/entry/K05961+2.7.1.145+R02099" id="40B6BCE1" shape="rect" target="_blank" title="K05961 (dnk), 2.7.1.145, R02099"/>
+    <area class="original" coords="616,823,662,840" data-coords="616,823,662,840" href="https://www.genome.jp/entry/K05961+2.7.1.145+R01567" id="ABB2316B" shape="rect" target="_blank" title="K05961 (dnk), 2.7.1.145, R01567"/>
+    <area class="original" coords="430,300,476,317" data-coords="430,300,476,317" href="https://www.genome.jp/entry/K25435+K06287+K07043+R00662" id="63ACFD44" shape="rect" target="_blank" title="K25435 (ASMTL), K06287 (yhdE), K07043 (upp), R00662"/>
+    <area class="original" coords="430,935,476,952" data-coords="430,935,476,952" href="https://www.genome.jp/entry/K25435+K06287+R11323" id="E6B3E7BB" shape="rect" target="_blank" title="K25435 (ASMTL), K06287 (yhdE), R11323"/>
+    <area class="original" coords="430,354,476,371" data-coords="430,354,476,371" href="https://www.genome.jp/entry/K25435+K06287+R00515" id="C7B2F9B5" shape="rect" target="_blank" title="K25435 (ASMTL), K06287 (yhdE), R00515"/>
+    <area class="original" coords="616,403,662,420" data-coords="616,403,662,420" href="https://www.genome.jp/entry/K24242+3.1.3.91+R00511" id="A7AE3C71" shape="rect" target="_blank" title="K24242 (NT5C3), 3.1.3.91, R00511"/>
+    <area class="original" coords="745,367,791,384" data-coords="745,367,791,384" href="https://www.genome.jp/entry/K00756+K09913+2.4.2.2+R02296" id="92C539B2" shape="rect" target="_blank" title="K00756 (pdp), K09913 (ppnP), 2.4.2.2, R02296"/>
+    <area class="original" coords="745,277,791,294" data-coords="745,277,791,294" href="https://www.genome.jp/entry/K10213+K01250+K12700+3.2.2.8+R01080" id="91C5BD2F" shape="rect" target="_blank" title="K10213 (rihB), K01250 (rihA), K12700 (rihC), 3.2.2.8, R01080"/>
+    <area class="original" coords="745,853,791,870" data-coords="745,853,791,870" href="https://www.genome.jp/entry/K00756+K09913+2.4.2.2+R01570" id="33C6A635" shape="rect" target="_blank" title="K00756 (pdp), K09913 (ppnP), 2.4.2.2, R01570"/>
+    <area class="original" coords="616,926,662,943" data-coords="616,926,662,943" href="https://www.genome.jp/entry/K06966+3.2.2.10+R12956" id="F7B2B16B" shape="rect" target="_blank" title="K06966 (ppnN), 3.2.2.10, R12956"/>
+    <area class="original" coords="616,312,662,329" data-coords="616,312,662,329" href="https://www.genome.jp/entry/K06966+3.2.2.10+R12955" id="8DADC8EE" shape="rect" target="_blank" title="K06966 (ppnN), 3.2.2.10, R12955"/>
+    <area class="original" coords="745,213,791,230" data-coords="745,213,791,230" href="https://www.genome.jp/entry/K00756+K09913+2.4.2.2+R01876" id="2DBFB641" shape="rect" target="_blank" title="K00756 (pdp), K09913 (ppnP), 2.4.2.2, R01876"/>
+    <area class="original" coords="478,343,524,360" data-coords="478,343,524,360" href="https://www.genome.jp/entry/K08320+3.6.1.65+R00515" id="9B98F810" shape="rect" target="_blank" title="K08320 (nudG), 3.6.1.65, R00515"/>
+    <area class="original" coords="430,620,476,637" data-coords="430,620,476,637" href="https://www.genome.jp/entry/K08320+3.6.1.65+R01668" id="66B0753E" shape="rect" target="_blank" title="K08320 (nudG), 3.6.1.65, R01668"/>
+    <area class="original" coords="616,267,662,284" data-coords="616,267,662,284" href="https://www.genome.jp/entry/K08723+K25434+R00963" id="09B34964" shape="rect" target="_blank" title="K08723 (yjjG), K25434 (pynA), R00963"/>
+    <area class="original" coords="616,422,662,439" data-coords="616,422,662,439" href="https://www.genome.jp/entry/K08723+K25434+R00511" id="8EAF466B" shape="rect" target="_blank" title="K08723 (yjjG), K25434 (pynA), R00511"/>
+    <area class="original" coords="616,579,662,596" data-coords="616,579,662,596" href="https://www.genome.jp/entry/K08723+K25434+R01664" id="3EB5C2E1" shape="rect" target="_blank" title="K08723 (yjjG), K25434 (pynA), R01664"/>
+    <area class="original" coords="616,734,662,751" data-coords="616,734,662,751" href="https://www.genome.jp/entry/K08723+K25434+R02102" id="C3B2B5E8" shape="rect" target="_blank" title="K08723 (yjjG), K25434 (pynA), R02102"/>
+    <area class="original" coords="616,882,662,899" data-coords="616,882,662,899" href="https://www.genome.jp/entry/K08723+K25434+R01569" id="92B73D59" shape="rect" target="_blank" title="K08723 (yjjG), K25434 (pynA), R01569"/>
+    <area class="original" coords="40,45,244,70" data-coords="40,45,244,70" data-entry="map00240" href="https://www.genome.jp/entry/map00240" id="37B2B5D8" shape="rect" target="_blank" title="map00240: Pyrimidine metabolism"/>
+    <area class="original" coords="102,90,249,115" data-coords="102,90,249,115" data-entry="map00030" href="https://www.genome.jp/pathway/map00030" id="5FABD618" shape="rect" target="_blank" title="map00030: Pentose phosphate pathway"/>
+    <area class="original" coords="66,360,191,394" data-coords="66,360,191,394" data-entry="map00250" href="https://www.genome.jp/pathway/map00250" id="47E222E5" shape="rect" target="_blank" title="map00250: Alanine, aspartate and glutamate metabolism"/>
+    <area class="original" coords="1229,854,1362,888" data-coords="1229,854,1362,888" data-entry="map00280" href="https://www.genome.jp/pathway/map00280" id="133C70C5" shape="rect" target="_blank" title="map00280: Valine, leucine and isoleucine degradation"/>
+    <area class="original" coords="17,281,96,315" data-coords="17,281,96,315" data-entry="map00220" href="https://www.genome.jp/pathway/map00220" id="5503CE75" shape="rect" target="_blank" title="map00220: Arginine biosynthesis"/>
+    <area class="original" coords="1229,222,1352,247" data-coords="1229,222,1352,247" data-entry="map00410" href="https://www.genome.jp/pathway/map00410" id="0A43F7CB" shape="rect" target="_blank" title="map00410: beta-Alanine metabolism"/>
+   </map>
+   <map data-scale="1" id="module_mapdata" name="module_mapdata">
+    <area class="module" coords="1179,871,1084,871,1084,873,1179,873" data-coords="1179,871,1084,871,1084,873,1179,873" data-module="M00046" data-refid="EAB92E76" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1179,872,1170,875,1170,868" data-coords="1179,872,1170,875,1170,868" data-module="M00046" data-refid="E3230CDF" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="986,871,1074,871,1074,873,986,873" data-coords="986,871,1074,871,1074,873,986,873" data-module="M00046" data-refid="53AB68E3" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1074,872,1065,875,1065,868" data-coords="1074,872,1065,875,1065,868" data-module="M00046" data-refid="5A52193D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="986,872,994,868,994,875" data-coords="986,872,994,868,994,875" data-module="M00046" data-refid="B172328F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="457,866,555,866,555,868,457,868" data-coords="457,866,555,866,555,868,457,868" data-module="M00938" data-refid="7A17061F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="457,867,465,863,465,870" data-coords="457,867,465,863,465,870" data-module="M00938" data-refid="F5F49B4F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,871,442,871,442,873,342,873" data-coords="342,871,442,871,442,873,342,873" data-module="M00938" data-refid="78147A08" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="442,872,433,875,433,868" data-coords="442,872,433,875,433,868" data-module="M00938" data-refid="EA78934F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,872,350,868,350,875" data-coords="342,872,350,868,350,875" data-module="M00938" data-refid="34635513" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="449,731,449,813,451,813,451,731" data-coords="449,731,449,813,451,813,451,731" data-module="M00938" data-refid="5C166E7B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="450,731,453,739,446,739" data-coords="450,731,453,739,446,739" data-module="M00938" data-refid="62672C45" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,718,443,718,443,720,342,720" data-coords="342,718,443,718,443,720,342,720" data-module="M00938" data-refid="3313F501" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="443,719,434,722,434,715" data-coords="443,719,434,722,434,715" data-module="M00938" data-refid="506E1345" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,719,350,715,350,722" data-coords="342,719,350,715,350,722" data-module="M00938" data-refid="9A4C1E04" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="341,568,443,568,443,570,341,570" data-coords="341,568,443,568,443,570,341,570" data-module="M00053" data-refid="B612F386" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="443,569,434,572,434,565" data-coords="443,569,434,572,434,565" data-module="M00053" data-refid="4725132C" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="341,569,349,565,349,572" data-coords="341,569,349,565,349,572" data-module="M00053" data-refid="90797AEB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="449,408,449,563,451,563,451,408" data-coords="449,408,449,563,451,563,451,408" data-module="M00053" data-refid="0B14E722" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="450,563,446,554,453,554" data-coords="450,563,446,554,453,554" data-module="M00053" data-refid="537BF42C" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="341,415,442,415,442,417,341,417" data-coords="341,415,442,415,442,417,341,417" data-module="M00052" data-refid="63126EFC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="442,416,433,419,433,412" data-coords="442,416,433,419,433,412" data-module="M00052" data-refid="AF41B51D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="341,416,349,412,349,419" data-coords="341,416,349,412,349,419" data-module="M00052" data-refid="F8B9E3DC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="333,243,333,403,335,403,335,243" data-coords="333,243,333,403,335,403,335,243" data-module="M00052" data-refid="96115AE9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="334,403,330,394,337,394" data-coords="334,403,330,394,337,394" data-module="M00052" data-refid="D07AEDDC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,235,437,235,437,237,342,237" data-coords="342,235,437,235,437,237,342,237" data-module="M00052" data-refid="F9116BE7" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="437,236,428,239,428,232" data-coords="437,236,428,239,428,232" data-module="M00052" data-refid="91E04804" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="342,236,350,232,350,239" data-coords="342,236,350,232,350,239" data-module="M00052" data-refid="E85986C3" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="388,110,388,144,388,144,388,145,388,145,389,147,389,147,389,148,389,148,390,149,390,149,391,151,391,151,392,152,393,151,395,151,394,152,395,153,396,152,398,152,398,152,440,152,440,154,398,154,398,154,396,154,397,153,396,152,395,153,393,153,394,152,393,151,393,151,392,149,392,149,391,148,391,148,391,147,391,147,390,145,390,145,390,144,390,144,390,110" data-coords="388,110,388,144,388,144,388,145,388,145,389,147,389,147,389,148,389,148,390,149,390,149,391,151,391,151,392,152,393,151,395,151,394,152,395,153,396,152,398,152,398,152,440,152,440,154,398,154,398,154,396,154,397,153,396,152,395,153,393,153,394,152,393,151,393,151,392,149,392,149,391,148,391,148,391,147,391,147,390,145,390,145,390,144,390,144,390,110" data-module="M00051" data-refid="BE233E65" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="389,110,392,118,385,118" data-coords="389,110,392,118,385,118" data-module="M00051" data-refid="8B62FBB9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="478,152,554,152,554,152,555,152,555,152,557,153,557,153,558,153,557,154,558,155,558,155,560,157,560,157,561,158,561,158,561,159,561,159,562,161,562,161,562,162,562,162,562,228,564,228,564,162,564,162,564,161,564,161,563,159,563,159,563,158,563,158,562,157,562,157,560,155,560,155,559,154,558,155,557,155,557,155,555,154,555,154,554,154,554,154,478,154" data-coords="478,152,554,152,554,152,555,152,555,152,557,153,557,153,558,153,557,154,558,155,558,155,560,157,560,157,561,158,561,158,561,159,561,159,562,161,562,161,562,162,562,162,562,228,564,228,564,162,564,162,564,161,564,161,563,159,563,159,563,158,563,158,562,157,562,157,560,155,560,155,559,154,558,155,557,155,557,155,555,154,555,154,554,154,554,154,478,154" data-module="M00051" data-refid="8E19AB57" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="563,228,559,219,566,219" data-coords="563,228,559,219,566,219" data-module="M00051" data-refid="6C39D045" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="353,152,467,152,467,154,353,154" data-coords="353,152,467,152,467,154,353,154" data-module="M00051" data-refid="2810EDAC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="467,153,458,156,458,149" data-coords="467,153,458,156,458,149" data-module="M00051" data-refid="3212B0FA" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="353,153,361,149,361,156" data-coords="353,153,361,149,361,156" data-module="M00051" data-refid="6F1396B9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="236,152,341,152,341,154,236,154" data-coords="236,152,341,152,341,154,236,154" data-module="M00051" data-refid="810E5E9D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="341,153,332,156,332,149" data-coords="341,153,332,156,332,149" data-module="M00051" data-refid="615866B9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="236,153,244,149,244,156" data-coords="236,153,244,149,244,156" data-module="M00051" data-refid="9ECBBB78" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="134,152,224,152,224,154,134,154" data-coords="134,152,224,152,224,154,134,154" data-module="M00051" data-refid="960BD466" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="224,153,215,156,215,149" data-coords="224,153,215,156,215,149" data-module="M00051" data-refid="91108B78" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="134,153,142,149,142,156" data-coords="134,153,142,149,142,156" data-module="M00051" data-refid="E7B24D37" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="127,221,127,159,129,159,129,221" data-coords="127,221,127,159,129,159,129,221" data-module="M00051" data-refid="720C3488" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="128,159,131,167,124,167" data-coords="128,159,131,167,124,167" data-module="M00051" data-refid="DB682337" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="127,292,127,231,129,231,129,292" data-coords="127,292,127,231,129,231,129,292" data-module="M00051" data-refid="830C3CE9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="128,231,131,239,124,239" data-coords="128,231,131,239,124,239" data-module="M00051" data-refid="6124CF46" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="427,769,473,786" data-coords="427,769,473,786" data-module="M00938" data-refid="B3B5E1D5" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="483,238,529,255" data-coords="483,238,529,255" data-module="M00052" data-refid="A6979AFA" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="565,788,611,805" data-coords="565,788,611,805" data-module="M00938" data-refid="AB92528E" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="128,297,4" data-coords="128,297,4" data-module="M00051" data-refid="FE6FC48E" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="105,255,151,272" data-coords="105,255,151,272" data-module="M00051" data-refid="41A10A71" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="105,183,151,200" data-coords="105,183,151,200" data-module="M00051" data-refid="0F998CE8" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="156,145,202,162" data-coords="156,145,202,162" data-module="M00051" data-refid="C2869E29" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="267,126,313,143" data-coords="267,126,313,143" data-module="M00051" data-refid="5D8C16A5" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="267,145,313,162" data-coords="267,145,313,162" data-module="M00051" data-refid="448E169F" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="399,145,445,162" data-coords="399,145,445,162" data-module="M00051" data-refid="439F98F7" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="372,228,418,245" data-coords="372,228,418,245" data-module="M00052" data-refid="248F220C" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="483,217,529,234" data-coords="483,217,529,234" data-module="M00052" data-refid="8D959900" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="311,310,357,327" data-coords="311,310,357,327" data-module="M00052" data-refid="DBA18CDF" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="372,412,418,429" data-coords="372,412,418,429" data-module="M00052" data-refid="908E1F8A" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="427,496,473,513" data-coords="427,496,473,513" data-module="M00053" data-refid="66AD694C" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="372,561,418,578" data-coords="372,561,418,578" data-module="M00053" data-refid="78939DFB" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="372,706,418,723" data-coords="372,706,418,723" data-module="M00938" data-refid="F78F900D" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="515,788,561,805" data-coords="515,788,561,805" data-module="M00938" data-refid="A6AB4659" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="372,863,418,880" data-coords="372,863,418,880" data-module="M00938" data-refid="AD960CFB" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="483,854,529,871" data-coords="483,854,529,871" data-module="M00938" data-refid="489C85F4" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="907,853,953,870" data-coords="907,853,953,870" data-module="M00046" data-refid="37B78876" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="907,874,953,891" data-coords="907,874,953,891" data-module="M00046" data-refid="50B98A70" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1009,864,1055,881" data-coords="1009,864,1055,881" data-module="M00046" data-refid="FF5113C0" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1104,864,1150,881" data-coords="1104,864,1150,881" data-module="M00046" data-refid="06C1EE90" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="267,164,313,181" data-coords="267,164,313,181" data-module="M00051" data-refid="2B901699" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="496,145,542,162" data-coords="496,145,542,162" data-module="M00051" data-refid="D1A1FAED" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="128,153,4" data-coords="128,153,4" data-module="M00051" data-refid="FA6FBF7A" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="128,225,4" data-coords="128,225,4" data-module="M00051" data-refid="FC6FC46B" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="230,153,4" data-coords="230,153,4" data-module="M00051" data-refid="D26FD893" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="389,104,4" data-coords="389,104,4" data-module="M00051" data-refid="006FF1FC" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="473,153,4" data-coords="473,153,4" data-module="M00051" data-refid="E1700AF7" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="334,236,4" data-coords="334,236,4" data-module="M00052" data-refid="E96FF689" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="446,236,4" data-coords="446,236,4" data-module="M00052" data-refid="F3700FA2" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="563,236,4" data-coords="563,236,4" data-module="M00051+M00052" data-refid="E47028D4" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="849,236,4" data-coords="849,236,4" data-module="M00046+M00939" data-refid="027073A7" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="334,410,4" data-coords="334,410,4" data-module="M00052" data-refid="E370007F" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="334,872,4" data-coords="334,872,4" data-module="M00938" data-refid="E570149D" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="450,872,4" data-coords="450,872,4" data-module="M00938" data-refid="D1702DCF" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="563,872,4" data-coords="563,872,4" data-module="M00938" data-refid="E07046E8" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="980,872,4" data-coords="980,872,4" data-module="M00046" data-refid="D170AB1A" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1080,872,4" data-coords="1080,872,4" data-module="M00046" data-refid="8CAF482A" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1185,872,4" data-coords="1185,872,4" data-module="M00046" data-refid="A5AF612A" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="450,411,4" data-coords="450,411,4" data-module="M00052+M00053" data-refid="D07019B1" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="450,817,4" data-coords="450,817,4" data-module="M00938" data-refid="D6702DB1" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="336,724,4" data-coords="336,724,4" data-module="M00938" data-refid="F1700F84" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="450,723,4" data-coords="450,723,4" data-module="M00938" data-refid="D27028B6" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="563,723,4" data-coords="563,723,4" data-module="M00938" data-refid="E17041CF" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="450,569,4" data-coords="450,569,4" data-module="M00053" data-refid="D8701ECA" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="334,569,4" data-coords="334,569,4" data-module="M00053" data-refid="EC700598" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="347,153,4" data-coords="347,153,4" data-module="M00051" data-refid="F56FF1AC" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="337,716,337,691,337,691,337,689,337,689,338,688,338,688,338,686,338,686,339,685,339,685,340,684,340,684,341,683,342,682,344,682,343,683,344,682,345,681,347,681,347,681,543,681,543,681,545,681,544,682,545,683,546,682,548,682,547,683,548,684,548,684,549,685,549,685,550,686,550,686,550,688,550,688,551,689,551,689,551,691,551,691,551,714,553,714,553,691,553,691,553,689,553,689,552,688,552,688,552,686,552,686,551,685,551,685,550,684,550,684,549,683,548,684,546,684,547,683,546,682,545,683,543,683,543,683,347,683,347,683,345,683,346,682,345,683,344,684,342,684,343,683,342,684,342,684,341,685,341,685,340,686,340,686,340,688,340,688,339,689,339,689,339,691,339,691,339,716" data-coords="337,716,337,691,337,691,337,689,337,689,338,688,338,688,338,686,338,686,339,685,339,685,340,684,340,684,341,683,342,682,344,682,343,683,344,682,345,681,347,681,347,681,543,681,543,681,545,681,544,682,545,683,546,682,548,682,547,683,548,684,548,684,549,685,549,685,550,686,550,686,550,688,550,688,551,689,551,689,551,691,551,691,551,714,553,714,553,691,553,691,553,689,553,689,552,688,552,688,552,686,552,686,551,685,551,685,550,684,550,684,549,683,548,684,546,684,547,683,546,682,545,683,543,683,543,683,347,683,347,683,345,683,346,682,345,683,344,684,342,684,343,683,342,684,342,684,341,685,341,685,340,686,340,686,340,688,340,688,339,689,339,689,339,691,339,691,339,716" data-module="M00938" data-refid="F14DBCB2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="552,714,548,705,555,705" data-coords="552,714,548,705,555,705" data-module="M00938" data-refid="13E0ED86" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="562,729,562,864,564,864,564,729" data-coords="562,729,562,864,564,864,564,729" data-module="M00938" data-refid="AB18FAAB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="563,864,559,855,566,855" data-coords="563,864,559,855,566,855" data-module="M00938" data-refid="B85BA490" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="862,871,974,871,974,873,862,873" data-coords="862,871,974,871,974,873,862,873" data-module="M00046" data-refid="82213135" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="974,872,965,875,965,868" data-coords="974,872,965,875,965,868" data-module="M00046" data-refid="A3B7028F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="862,872,870,868,870,875" data-coords="862,872,870,868,870,875" data-module="M00046" data-refid="E0D1564E" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="453,235,555,235,555,237,453,237" data-coords="453,235,555,235,555,237,453,237" data-module="M00052" data-refid="6C13F88F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="555,236,546,239,546,232" data-coords="555,236,546,239,546,232" data-module="M00052" data-refid="6234DA45" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="453,236,461,232,461,239" data-coords="453,236,461,232,461,239" data-module="M00052" data-refid="AC1D3E04" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1084,234,1179,234,1179,236,1084,236" data-coords="1084,234,1179,234,1179,236,1084,236" data-module="M00046" data-refid="015A9B90" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1179,235,1170,238,1170,231" data-coords="1179,235,1170,238,1170,231" data-module="M00046" data-refid="CC219440" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="986,234,1074,234,1074,236,986,236" data-coords="986,234,1074,234,1074,236,986,236" data-module="M00046" data-refid="53BB5846" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1074,235,1065,238,1065,231" data-coords="1074,235,1065,238,1065,231" data-module="M00046" data-refid="4350A09E" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="986,235,994,231,994,238" data-coords="986,235,994,231,994,238" data-module="M00046" data-refid="6565D944" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="907,216,953,233" data-coords="907,216,953,233" data-module="M00046" data-refid="7CB09B82" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="907,237,953,254" data-coords="907,237,953,254" data-module="M00046" data-refid="95B29D7C" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1009,227,1055,244" data-coords="1009,227,1055,244" data-module="M00046" data-refid="F65D2437" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1104,227,1150,244" data-coords="1104,227,1150,244" data-module="M00046" data-refid="FDCDFF02" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1185,235,4" data-coords="1185,235,4" data-module="M00046" data-refid="A8AF4316" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1080,235,4" data-coords="1080,235,4" data-module="M00046" data-refid="8FAF2A16" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="980,235,4" data-coords="980,235,4" data-module="M00046" data-refid="D4708D06" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="861,234,974,234,974,236,861,236" data-coords="861,234,974,234,974,236,861,236" data-module="M00046" data-refid="531E232D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="974,235,965,238,965,231" data-coords="974,235,965,238,965,231" data-module="M00046" data-refid="57939944" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="861,235,869,231,869,238" data-coords="861,235,869,231,869,238" data-module="M00046" data-refid="943B5A03" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="995,467,1083,467,1083,469,995,469" data-coords="995,467,1083,467,1083,469,995,469" data-module="M00939" data-refid="52B94974" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1083,468,1074,471,1074,464" data-coords="1083,468,1074,471,1074,464" data-module="M00939" data-refid="43456B2C" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="891,250,891,459,891,459,891,461,891,461,892,462,892,462,892,464,892,464,893,465,893,465,894,466,894,466,895,467,896,466,898,466,897,467,898,468,899,467,901,467,901,467,985,467,985,469,901,469,901,469,899,469,900,468,899,467,898,468,896,468,897,467,896,466,896,466,895,465,895,465,894,464,894,464,894,462,894,462,893,461,893,461,893,459,893,459,893,250" data-coords="891,250,891,459,891,459,891,461,891,461,892,462,892,462,892,464,892,464,893,465,893,465,894,466,894,466,895,467,896,466,898,466,897,467,898,468,899,467,901,467,901,467,985,467,985,469,901,469,901,469,899,469,900,468,899,467,898,468,896,468,897,467,896,466,896,466,895,465,895,465,894,464,894,464,894,462,894,462,893,461,893,461,893,459,893,459,893,250" data-module="M00939" data-refid="65AE4572" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="985,467,976,471,976,464" data-coords="985,467,976,471,976,464" data-module="M00939" data-refid="8215865D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="991,468,4" data-coords="991,468,4" data-module="M00939" data-refid="DC70972E" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="918,460,964,477" data-coords="918,460,964,477" data-module="M00939" data-refid="65BAA364" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1013,460,1059,477" data-coords="1013,460,1059,477" data-module="M00939" data-refid="F95E8E26" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1089,468,4" data-coords="1089,468,4" data-module="M00939" data-refid="BFAF3425" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1094,467,1174,467,1174,469,1094,469" data-coords="1094,467,1174,467,1174,469,1094,469" data-module="M00939" data-refid="EC588F11" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1174,468,1165,471,1165,464" data-coords="1174,468,1165,471,1165,464" data-module="M00939" data-refid="00FA3ED0" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1271,468,4" data-coords="1271,468,4" data-module="M00939" data-refid="97AF660C" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1276,467,1356,467,1356,469,1276,469" data-coords="1276,467,1356,467,1356,469,1276,469" data-module="M00939" data-refid="FB35E3C1" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1356,468,1347,471,1347,464" data-coords="1356,468,1347,471,1347,464" data-module="M00939" data-refid="7C63E613" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1290,449,1336,466" data-coords="1290,449,1336,466" data-module="M00939" data-refid="0D48093D" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1362,468,4" data-coords="1362,468,4" data-module="M00939" data-refid="9CAF7EF3" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1108,460,1154,477" data-coords="1108,460,1154,477" data-module="M00939" data-refid="00CD1060" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1180,468,4" data-coords="1180,468,4" data-module="M00939" data-refid="92AF4D25" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="1185,467,1265,467,1265,469,1185,469" data-coords="1185,467,1265,467,1265,469,1185,469" data-module="M00939" data-refid="F3C73969" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1265,468,1256,471,1256,464" data-coords="1265,468,1256,471,1256,464" data-module="M00939" data-refid="BEAF126F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="1199,460,1245,477" data-coords="1199,460,1245,477" data-module="M00939" data-refid="05DE10D1" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="1290,470,1336,487" data-coords="1290,470,1336,487" data-module="M00939" data-refid="0D4B7CD8" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="430,673,476,690" data-coords="430,673,476,690" data-module="M00938" data-refid="B1B670AF" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="854,872,4" data-coords="854,872,4" data-module="M00046" data-refid="E57091CF" href="javascript:void(0)" shape="circle" target="_blank"/>
+   </map>
+  </div>
+  <!-- pathway image end -->
+  <!-- control panel start -->
+  <div id="controlPanel">
+   <div class="controller">
+    <div class="feature option">
+     <h5>
+      Option
+     </h5>
+     <div>
+      <div class="row scale">
+       <span class="title">
+        Scale:
+       </span>
+       <span class="content">
+        <input max="1" min="0.1" step="0.1" type="range" value="1"/>
+        <span class="label">
+         100%
+        </span>
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="feature search">
+     <h5>
+      Search
+     </h5>
+     <div>
+      <div class="row query">
+       <form>
+        <input autocomplete="off" name="query" style="width:130px;" type="text" value=""/>
+        <input type="submit" value="Go"/>
+        <span class="ui-icon button ui-icon-close clear-query hidden">
+        </span>
+       </form>
+      </div>
+      <div class="row result">
+      </div>
+     </div>
+    </div>
+    <div class="feature search-pathway">
+     <h5>
+      ID search
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <form>
+       <div class="row" style="display:grid; grid-template-columns:135px 1fr; column-gap:5px;">
+        <div>
+         <textarea class="query" rows="2" style="width:130px; resize:none;"></textarea>
+        </div>
+        <div>
+         <input class="submit" type="submit" value="Go"/>
+         <span class="ui-icon button ui-icon-close clear-query hidden">
+         </span>
+        </div>
+       </div>
+      </form>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature color-pathway">
+     <h5>
+      Color
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature">
+     <h5>
+      Module
+     </h5>
+     <div>
+      <div class="row">
+       <ul class="tree module-tree">
+        <li class="classification class-A ">
+         <span>
+          <input type="checkbox"/>
+          Pathway modules
+         </span>
+         <ul>
+          <li class="classification class-B ">
+           <span>
+            <input type="checkbox"/>
+            Nucleotide metabolism
+           </span>
+           <ul>
+            <li class="classification class-C ">
+             <span>
+              <input type="checkbox"/>
+              Pyrimidine metabolism
+             </span>
+             <ul>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00051" href="/module/M00051" target="_blank">
+                 M00051
+                </a>
+                Uridine monophosphate biosynthesis
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00052" href="/module/M00052" target="_blank">
+                 M00052
+                </a>
+                Pyrimidine ribonucleotide biosynthesis
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00053" href="/module/M00053" target="_blank">
+                 M00053
+                </a>
+                Pyrimidine deoxyribonuleotide biosynthesis
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00938" href="/module/M00938" target="_blank">
+                 M00938
+                </a>
+                Pyrimidine deoxyribonuleotide biosynthesis
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00046" href="/module/M00046" target="_blank">
+                 M00046
+                </a>
+                Pyrimidine degradation
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00939" href="/module/M00939" target="_blank">
+                 M00939
+                </a>
+                Pyrimidine degradation
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+   <button class="close">
+    <img src="/Fig/left_triangle_12x12.png"/>
+   </button>
+   <button class="open">
+    <img src="/Fig/right_triangle_12x12.png"/>
+   </button>
+  </div>
+  <!-- control panel end -->
+  <form action="/kegg-bin/download" id="downloadForm" method="post">
+   <input name="name" type="hidden" value="map00240.png"/>
+   <input name="content" type="hidden"/>
+   <input name="decode" type="hidden" value="base64"/>
+  </form>
+  <div id="waiting-circle">
+   <img src="/Fig/waiting-circle-small.gif"/>
+  </div>
+  <!-- pathway image url start -->
+  <form class="imageset" data-name="">
+   <input data-situation="1x" data-src="/kegg/pathway/map/map00240.png" name="image_normal" type="hidden" value="/kegg/pathway/map/map00240.png 1x"/>
+  </form>
+  <!-- pathway image url end -->
+ </body>
+</html>

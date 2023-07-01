@@ -1,0 +1,47 @@
+\usepackage{ctex}		% Print chinese
+\usepackage{geometry}	% page layout
+\usepackage{fancyhdr}	% Header and footer
+\usepackage{graphicx}   % Insert picture
+\usepackage[farskip=0pt]{subfig} % two aligned pictures
+\usepackage{dcolumn}    % Align numeric values in the same column at the decimal mark
+\usepackage[font={small}, justification=centerfirst, width=.75\textwidth]{caption}
+\usepackage{flafter}
+\usepackage[compact]{titlesec}
+\usepackage{float}
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+	filecolor=black,
+    urlcolor=black,
+    citecolor=black
+}
+\setlength{\parindent}{2em}
+% Set up fonts for Linux
+\setmainfont{Times New Roman}       % 设置英文字体
+\setCJKmainfont{SimSun}             % 设置中文字体
+\setCJKsansfont{Microsoft YaHei}    % 设置中文无衬线字体
+
+% Set up fonts for Windows
+%\setmainfont{Times New Roman}  % 设置英文字体
+%\setCJKmainfont{SimSun}         % 设置中文字体
+%\setCJKsansfont{Microsoft YaHei}   % 设置中文无衬线字体
+
+% Page margin
+\geometry{left = 2cm, right = 2cm, top = 2.8cm, bottom = 2.5cm, headheight = 2cm, headsep = 0.5cm}
+
+% % Header and footer
+% \newsavebox{\leftHeadPic}
+% \newsavebox{\rightHeadPic}
+% \sbox{\leftHeadPic}{\includegraphics[totalheight=1cm]{img/logoMetware.png}}
+% \sbox{\rightHeadPic}{\includegraphics[totalheight=2cm]{img/qrCode_agr.png}}
+% \pagestyle{fancy}
+% \lhead{\usebox{\leftHeadPic}}
+% \rhead{\usebox{\rightHeadPic}}
+
+% Format contents
+\renewcommand\contentsname{\centerline{目 \quad 录}}
+\setcounter{tocdepth}{2}

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+ <!--
+ENTRY       map00300
+DEFINITION  Lysine biosynthesis
+--->
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   KEGG PATHWAY: Lysine biosynthesis + Reference pathway
+  </title>
+  <link href="/css/jquery-ui.css" rel="stylesheet"/>
+  <style type="text/css">
+   <!--
+
+h1.page-title {
+	font-size: 14px;
+	margin: 0px;
+	white-space: nowrap;
+}
+h1.page-title * {
+	vertical-align: middle;
+}
+
+input, select {
+	margin: 0px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/** navigation start **/
+.nav {
+	padding: 3px 0px 5px 0px;
+	position: relative;
+	min-width: 600px;
+	max-width: 800px;
+	background: #fff;
+}
+
+.nav form {
+	margin: 5px 0px 0px 0px;
+}
+
+.nav .help {
+	display: inline-block;
+	position: relative;
+	left: 20px;
+/*
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+*/
+}
+/** navigation end **/
+
+#description {
+	padding: 10px;
+	width: 800px;
+}
+
+#waiting-circle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	display: none;
+}
+
+#controlPanel {
+	top: 0px;
+	left: 0px;
+	width: 220px;
+	background: #ffffff;
+	padding: 0px 0px 0px 0px;
+	white-space: nowrap;
+	overflow: auto;
+	position: fixed;
+	border: solid 1px #999999;
+	display: none;
+}
+
+#controlPanel.closed {
+	border: none;
+	padding: 0px 0px 0px 0px;
+	background: transparent;
+
+	/* jQuery-UI resizale.disabled() の実行で
+	 *      色が薄くなるのを打ち消す */
+	opacity: 1.0;
+}
+
+/** div.row start **/
+
+div.row {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/* 以下のwidth,overflowの定義で.rowのブロック内で横スクロールする。 */
+	/*
+	width: 98%;
+	overflow: auto;
+	*/
+}
+
+div.row * {
+	vertical-align: middle;
+}
+
+/* 横に並べる場合(title可変幅) start */
+
+.row.scale input {
+	width: 110px;
+}
+
+.row.scale .label {
+	font-size: 0.9em;
+}
+
+/* 横に並べる場合(title可変幅) end */
+
+
+/* Search欄の検索結果 start */
+
+div.row.result > div {
+	margin: 5px 1px 2px 1px;
+}
+
+/* Search欄の検索結果 end */
+
+/**  div.row end **/
+
+#controlPanel h5 {
+  margin: 0px;
+	padding: 5px 0px 5px 10px;
+	vertical-align: middle;
+	border-top: solid 1px #cccccc;
+	border-bottom: solid 1px #cccccc;
+	background: #eeeeee;
+	/* ui-iconの位置調整のために必要 */
+	position: relative;
+}
+
+#controlPanel h5::before {
+	content: url(/Fig/get_htext/open.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5.closed::before {
+	content: url(/Fig/get_htext/close.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5:first-child {
+	border-top: none;
+}
+
+#controlPanel h5:hover {
+	cursor: pointer;
+}
+
+#controlPanel h5  + div {
+	padding: 5px 0px 5px 10px;
+}
+
+#controlPanel h5 .ui-icon {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	margin-top: -8px;
+	cursor: pointer;
+}
+
+button {
+	/* Safariでボタンの周りに入る余白を削除 */
+	margin: 0px;
+	padding: 0px;
+	/* ボタンを押した時に表示されるボーダーを非表示にする */
+	outline: none;
+}
+
+button.close, button.open {
+	border: none;
+	padding: 0px;
+	position: absolute;
+	right: 5px;
+	top: 7px;
+}
+
+button.close {
+	/* コントロールパネルに合わせて初期は非表示 */
+	display: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+button img {
+	/* 画像の下に入る余白を無くす */
+	display: block;
+}
+
+/** tree style start **/
+ul.tree, ul.tree ul {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.tree ul {
+	padding-left: 12px;
+}
+
+ul.tree .class-A > span {
+	font-weight: bold;
+}
+
+ul.tree li {
+	margin: 3px 0px 3px 0px;
+}
+
+.module-tree .module.disabled {
+	display: none;
+}
+
+.module-tree .classification.disabled {
+	display: none;
+}
+
+/** tree style > User data start **/
+ul.mappers {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.mappers li {
+	position: relative;
+	margin: 5px 0px 2px 0px;
+}
+
+ul.mappers li .ui-icon {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+}
+ul.mappers li .ui-icon:hover {
+	cursor: pointer;
+}
+ul.mappers li .ui-icon-trash {
+	right: 5px;
+}
+ul.mappers li .ui-icon-document {
+	right: 26px;
+}
+/** tree style > User data end **/
+
+/** tree style end **/
+
+.ui-icon.button {
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul.simple {
+	margin: 0px;
+	padding: 0px;
+}
+ul.simple li {
+	list-style-type: none;
+}
+ul.simple li:not(:first-child) {
+	margin-top: 5px;
+}
+
+//-->
+   body {font-size:12px; font-family:verdana,arial,helvetica,sans-serif; background-color:#ffffff}
+.text {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+b {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+th {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+td {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+input {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+select {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+a {text-decoration:none}
+a:link {color:#003399}
+a:visited {color:#003399}
+a:hover {color:#33cc99}
+font.title3 {color: #005050; font-size:14px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+hr.frame0 {border: 1px solid #f5e05f; color: #f5e05f}
+  </style>
+  <script src="/js/jquery-3.1.0.min.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/jquery.balloon.min.js">
+  </script>
+  <script src="/js/lz-string.min.js">
+  </script>
+  <script src="/kegg-bin/get_data.cgi?data=0021&amp;id=show_pathway.merged.js&amp;v2.09">
+  </script>
+  <script type="text/javascript">
+   <!--
+
+// common variable
+const env = {
+	       mapno: '00300',
+	         org: 'map',
+	       entry: 'map00300',
+	       scale: 1,
+	 colorModule: '',
+	personalConf: '',
+}
+
+// HELP button
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+
+//-->
+  </script>
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVR4AXSTA8wdQRSFv9q2bdu2bbth7QZF9ILatm3btvvbtnWS7D5/ye744szcbKdzzMnAhtVji/C7TUtE7VdvKfn8BmK+d3tckR1gY+XnOKLDMjS3T4g+ag3zdm3A8fD6k1GIFqNjSJg0kUk7AvXR9MwNev856mTIKQVx4Xx2jvfcgUCr2dQCBSAxMjdnVhRn561SSovsOCAPOqwD+hJTcvPtR3G1EAt5iyaT1CYvRupOBuruuYcwDk9/PIP3e3Pz719BKIhgVJcQDHLaaiCx5EGetPnowfK8u1uIfoUg9FEuvlHc5S2YNJ+ZbM5GeRTgwNpCLOl52pxXJLNHVdCHcNKgRo1YiAfyw8cLBRETh/rToE44TYfFmrm7jEDhG0jpXTWHU2VjRwyKlIlj5lRPdp/xszegMPQ1Cm1G3lzJ2HLCqxsSD7lJB0X34kthDKSf3TvQQ5Enbf72qzhKKW/OZDPOqKACXLYUci/imUelUP6iQd1wu4gSk3ObuojKteQXcqp4VDCh7fvxO8bC/csPOD54B7Z8e1cc3YArcqpgHPM+saUbewotpVZ4AkVeNOfPhcrktclbzCWE9TGTyYkD46o8QEb0BuZ79yEYE7uy3njrObSHTAAAAP//AwCnC723w5oqxAAAAABJRU5ErkJggg==" rel="icon" type="image/png"/>
+ </head>
+ <body>
+  <!-- header logo start -->
+  <!--
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+	<tr>
+		<td style="width:80px;">
+			<a href="/kegg/pathway.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+		</td>
+		<td style="vertical-align:middle;">
+			<font class="title3"><b>Lysine biosynthesis - Reference pathway</b></font>
+		</td>
+		<td valign="bottom" align="right">
+		</td>
+	</tr>
+</table>
+-->
+  <h1 class="page-title">
+   <a href="https://www.genome.jp/kegg/pathway.html" target="_blank">
+    <img alt="KEGG" border="0" src="data: image/gif;base64,R0lGODlhQQAuAPf/ADuLhIyLi+bl5cPOzBk7ONTm5AQZFwA7NYy6tgJsYrvLyhl0bUSNhRFtZK6rqw8fHSdYVO7x8RZLRnyrqPPz82CYk1iZk9DQ0Gmjnq7OywBVTeXo6OLm5m1zcvj6+gBeVSZ9dUBdW0VFRV1cXABCO/X09OLh4QBiWABmXYS2sufq6gBjWgBlXBRwafb29iuDe0lnZDRQTgEyLTp0bpqZmbvW0wBoXgJoX2Vsa/r8/EqTjbHSz/T392V2dNTT00mRiwxsYwBgVwJqYAE+ONvq6f39/SQ6OLq5udLl4wBRSTg9PRlXUgBiWs7NzV6hm19jY3+DgqbKxwVrYiwsLJrCvg9yah17ck2XkPDv7wBORiF4cK3Dwfr6+nx3dwBZUfb6+svJyfP39yZ7c+/v7wJnXgFGQN3d3cfb2hZ1bMjIyAYuKr29vQIpJQBgWD6CewNoYOzs7NnX1wBpYABrYgJtYwAkIAFIQgkuKgA3MQBqYPX5+EeQiQJrYkyTjAFqYPX5+QBnXsjKyf7+/vLx8f79/fn5+QFqYQFrYuTv7nuwq/T4+PP19eny8eLu7ez08/Hw8Pb5+ailpQJgWMTc2tnY2Njo5gJnXfb6+YGBgbW1tW6CgN7h4IaDhMC/v8DR0AVTTKW8upmUlPD19c/Y2BA0MExNTQpBPMXExOzz8iFOSSZQTYSzrztQTq6zsgJlXJSgn3CloHivqn2koaajo5ygoB9hWy96chJyafDy8gFcU4B+fiYwLi8vLglIQmlnZk6UjU1TUiV/d4mDhNLj4vP499Pn5J+8uQk1Me309M3QzwFjWgBXT0E9PfX4+CJwaP3+/sHb2DZtaMff3dbp5wRQSfj39/r5+dXV1aa4tlGUjsTY1peUlfn7+5abm2OBf5SnpaDHw5uqqbbAv/D29bPQzczLy1h9emmclwVoX7u8vJO/u1BqaO7t7XOGhNjn5hVyaWCemWtoaIqUkxdzawBqYaKfn8DBwMXCwwRNRbC3t7Wzs8ve3IKFhQBkWwJmXf///yH5BAEAAP8ALAAAAABBAC4AAAj/AP8JHEiwoMGDCBMqXMiwocOHECNKnEixosWFiX706aNDFpx/kxhs5CiOhxONIzf+sLDp4kMAJ/r1kzMk0j8dQWTaKDOCB5AVMoP2Q5EEh0uHe/r588dniD5GUlgsnWOgHLd5SpdqvaGhw9GGSZc2XRPlxFIhSUQ8+9Miqz8yN24IWeb168KwTA+0urJiaQI2Dv6xzUrmhJcPkrIYtasQL58D7apY8ncj1y4XgtsuPXQMk2ddmRg3ztrUFB+/MmgIHLw0z51qosFmFWJHw423Jx6wW63ZH01P04qJip0Qrz9JrsQe4DRQT29/b1iwkAPBBPGDxsloRfHAukDnbv2h/2BxSAaY6wazT/bHIkaR5s+18sHTBH1BvGRyJffnB98F+G4JIYcNdOBRjn0E4SVEGVkIsdQJPQC41A1lpAIBBEb4MBARVCCAQAaOiObYEKoksJQhdpjBW1b0sCEAF4VY8x4i8KCzQhBBrLCAOookFEYB5NTgznt3kXbAK8FIVViEmWWVhxqDEISEGCdIpVU/J7jBgUE5UAFCPyuswAIDNRSpXDqxmOWPIb0I0GRramAxECIN9KXVnSzUsttAl2TTDwsoLIUCUOfgUhxpQxxxBmFeyPOmP0/K+c8lVGpFBh9yWEnGCusQCUkfQdy5HRMzYIYdog7k8OVSfkjwiAfvOP8Zp0CJfLAVCnik4oxWh5AQxz/PWGCrVkIcot1bH2iCkGMk2JRCqJR50c1Vsso5zAqBvnVDHcIMcga0QmShWhTQipUFCR8c2yslBwHAAiCA0EFCPf8UsAK8gOQhwQZWyPrITWr6Q4cMXQgEzQeAyDFHECOggoZbCeAhQhzG3OaPEBoEcJA2MITgMStr/CPIFh5/nM8LspaACBPZYsyLqY6EAwMES5QBzAQQl8EMBSBN54chuSx2ECECET0QIUYLEsHDrd2xCALlJlDHPdJYUMlA1QjgwwC3aKqMAW7+w4g5S1CjgQZKWPRFb3KQogIAdmKsxCIvBCEFBu4QtEPACcj/EEojqyAj0COUXEOLPRaB1xoBo1SR1V9HZGAWCysAEQsiAumgZmEPDOLEB1pEEYZdivNHwBZCBEpGELvgAkC5lKPxjQr9+oXHNsMMhSUI4HxxVOl5EACKHIGi5cs/qFTg1g0fPDCAFNla8gAHVwTMQj8AKABb4r0Fr0BU0ULxDzG/KKMVHYAxMhRly5RSxD5uZPsWCwZ4VxHwpHAQTFYoOLMKCHZiShKmwI1KAIoyGuCHQDBgvqXQYQjxEMRFgKeGEqhjWP4AxJ+20g8DaCgMC8gKC2ZADgzc6QaSMMBHJtg9NVBAEZUSFWUSYACN0apcGgygJehQh1n8roVjEJsWwbB1JwGxQRcSFAgq6iRDB+JhBERiob8EMg5YtMEGeZCDHDRQhy48oyCVAELAlkIGefGiBF8pnR9ksAFucCMH/xiANyAgAQI84RQIKcAeVmADOQghASiQgQjC9kO3KGMeWtCCLZIhEAqMIUoK8QA2ovGJLAzBCMLYXhqfQ4brEeUJEimEDzqRBp6JpnQn7AqCJKKIN9jAD7CMZQLossqI5OAcJCiDLndZBjzUpZYPWUQaAkHMYhJTRcBMpjKXyUzGBAQAOw=="/>
+   </a>
+   Lysine biosynthesis - Reference pathway
+  </h1>
+  <!-- header logo end -->
+  <!-- page navigation start -->
+  <div class="nav">
+   [
+   <a href="https://www.genome.jp/brite/query=00300&amp;htext=br08901.keg&amp;option=-a&amp;node_proc=br08901_org&amp;proc_enabled=map&amp;panel=collapse" id="navPathwayMenu" target="_blank">
+    Pathway menu
+   </a>
+   |
+   <a href="https://www.genome.jp/entry/pathway+map00300" id="navPathwayEntry" target="_blank">
+    Pathway entry
+   </a>
+   |
+   <a href="#" id="downloadImageLink" target="_blank">
+    Image file
+   </a>
+   |
+   <a href="https://www.genome.jp/kegg/document/help_pathway.html" target="_blank">
+    Help
+   </a>
+   ]
+   <!-- organism list start -->
+   <!-- organism list end -->
+  </div>
+  <!-- page navigation end -->
+  <!-- pathway image start -->
+  <div class="image-block" style="position:static;">
+   <img border="0" id="pathwayimage" src="ko00300.png" srcset="ko00300.png 1x" usemap="#mapdata" width="1230"/>
+   <map data-scale="1" id="mapdata" name="mapdata">
+    <area class="original" coords="777,504,4" data-coords="777,504,4" data-entry="C19889" href="https://www.genome.jp/entry/C19889" id="F67069DE" shape="circle" target="_blank" title="C19889 (LysW-gamma-L-lysine)"/>
+    <area class="original" coords="685,504,4" data-coords="685,504,4" data-entry="C19888" href="https://www.genome.jp/entry/C19888" id="EC7050F7" shape="circle" target="_blank" title="C19888 (LysW-gamma-L-alpha-aminoadipate 6-semialdehyde)"/>
+    <area class="original" coords="593,504,4" data-coords="593,504,4" data-entry="C19887" href="https://www.genome.jp/entry/C19887" id="E2703810" shape="circle" target="_blank" title="C19887 (LysW-gamma-L-alpha-aminoadipyl 6-phosphate)"/>
+    <area class="original" coords="501,504,4" data-coords="501,504,4" data-entry="C19886" href="https://www.genome.jp/entry/C19886" id="D870372F" shape="circle" target="_blank" title="C19886 (LysW-gamma-L-alpha-aminoadipate)"/>
+    <area class="original" coords="159,187,4" data-coords="159,187,4" data-entry="C00049" href="https://www.genome.jp/entry/C00049" id="036FBFD9" shape="circle" target="_blank" title="C00049 (L-Aspartate)"/>
+    <area class="original" coords="262,187,4" data-coords="262,187,4" data-entry="C03082" href="https://www.genome.jp/entry/C03082" id="E06FD8ED" shape="circle" target="_blank" title="C03082 (4-Phospho-L-aspartate)"/>
+    <area class="original" coords="365,113,4" data-coords="365,113,4" data-entry="C00263" href="https://www.genome.jp/entry/C00263" id="EB6FF1CA" shape="circle" target="_blank" title="C00263 (L-Homoserine)"/>
+    <area class="original" coords="365,187,4" data-coords="365,187,4" data-entry="C00441" href="https://www.genome.jp/entry/C00441" id="EF6FF1ED" shape="circle" target="_blank" title="C00441 (L-Aspartate 4-semialdehyde)"/>
+    <area class="original" coords="572,187,4" data-coords="572,187,4" data-entry="C03972" href="https://www.genome.jp/entry/C03972" id="E0702406" shape="circle" target="_blank" title="C03972 (2,3,4,5-Tetrahydrodipicolinate)"/>
+    <area class="original" coords="717,120,4" data-coords="717,120,4" data-entry="C05539" href="https://www.genome.jp/entry/C05539" id="F2705552" shape="circle" target="_blank" title="C05539 (N-Acetyl-L-2-amino-6-oxopimelate)"/>
+    <area class="original" coords="854,120,4" data-coords="854,120,4" data-entry="C04390" href="https://www.genome.jp/entry/C04390" id="E3706EB6" shape="circle" target="_blank" title="C04390 (N6-Acetyl-LL-2,6-diaminoheptanedioate)"/>
+    <area class="original" coords="674,187,4" data-coords="674,187,4" data-entry="C04462" href="https://www.genome.jp/entry/C04462" id="EA703D06" shape="circle" target="_blank" title="C04462 (N-Succinyl-2-L-amino-6-oxoheptanedioate)"/>
+    <area class="original" coords="777,187,4" data-coords="777,187,4" data-entry="C04421" href="https://www.genome.jp/entry/C04421" id="F9705606" shape="circle" target="_blank" title="C04421 (N-Succinyl-LL-2,6-diaminoheptanedioate)"/>
+    <area class="original" coords="777,252,4" data-coords="777,252,4" data-entry="C00666" href="https://www.genome.jp/entry/C00666" id="F4705AF7" shape="circle" target="_blank" title="C00666 (LL-2,6-Diaminoheptanedioate)"/>
+    <area class="original" coords="777,323,4" data-coords="777,323,4" data-entry="C00680" href="https://www.genome.jp/entry/C00680" id="F5705FE8" shape="circle" target="_blank" title="C00680 (meso-2,6-Diaminoheptanedioate)"/>
+    <area class="original" coords="572,323,4" data-coords="572,323,4" data-entry="C03871" href="https://www.genome.jp/entry/C03871" id="DC702DE8" shape="circle" target="_blank" title="C03871 (L-2-Amino-6-oxoheptanedioate)"/>
+    <area class="original" coords="918,323,4" data-coords="918,323,4" data-entry="C04877" href="https://www.genome.jp/entry/C04877" id="FA709152" shape="circle" target="_blank" title="C04877 (UDP-N-acetylmuramoyl-L-alanyl-gamma-D-glutamyl-meso-2,6-diaminopimelate)"/>
+    <area class="original" coords="777,433,4" data-coords="777,433,4" data-entry="C00047" href="https://www.genome.jp/entry/C00047" id="F57064ED" shape="circle" target="_blank" title="C00047 (L-Lysine)"/>
+    <area class="original" coords="685,433,4" data-coords="685,433,4" data-entry="C00449" href="https://www.genome.jp/entry/C00449" id="EB704C06" shape="circle" target="_blank" title="C00449 (N6-(L-1,3-Dicarboxypropyl)-L-lysine)"/>
+    <area class="original" coords="593,433,4" data-coords="593,433,4" data-entry="C04076" href="https://www.genome.jp/entry/C04076" id="E170331F" shape="circle" target="_blank" title="C04076 (L-2-Aminoadipate 6-semialdehyde)"/>
+    <area class="original" coords="501,433,4" data-coords="501,433,4" data-entry="C05535" href="https://www.genome.jp/entry/C05535" id="D770323E" shape="circle" target="_blank" title="C05535 (alpha-Aminoadipoyl-S-acyl enzyme)"/>
+    <area class="original" coords="409,433,4" data-coords="409,433,4" data-entry="C05560" href="https://www.genome.jp/entry/C05560" id="FF70193E" shape="circle" target="_blank" title="C05560 (L-2-Aminoadipate adenylate)"/>
+    <area class="original" coords="409,504,4" data-coords="409,504,4" data-entry="C00956" href="https://www.genome.jp/entry/C00956" id="00701E34" shape="circle" target="_blank" title="C00956 (L-2-Aminoadipate)"/>
+    <area class="original" coords="307,504,4" data-coords="307,504,4" data-entry="C00322" href="https://www.genome.jp/entry/C00322" id="F670052F" shape="circle" target="_blank" title="C00322 (2-Oxoadipate)"/>
+    <area class="original" coords="307,433,4" data-coords="307,433,4" data-entry="C05662" href="https://www.genome.jp/entry/C05662" id="F570003E" shape="circle" target="_blank" title="C05662 (Homoisocitrate)"/>
+    <area class="original" coords="307,362,4" data-coords="307,362,4" data-entry="C04002" href="https://www.genome.jp/entry/C04002" id="F46FFB4D" shape="circle" target="_blank" title="C04002 ((Z)-But-1-ene-1,2,4-tricarboxylate)"/>
+    <area class="original" coords="215,362,4" data-coords="215,362,4" data-entry="C01251" href="https://www.genome.jp/entry/C01251" id="EA6FE266" shape="circle" target="_blank" title="C01251 ((R)-2-Hydroxybutane-1,2,4-tricarboxylate)"/>
+    <area class="original" coords="135,385,4" data-coords="135,385,4" data-entry="C00024" href="https://www.genome.jp/entry/C00024" id="ED6FC9A2" shape="circle" target="_blank" title="C00024 (Acetyl-CoA)"/>
+    <area class="original" coords="123,362,4" data-coords="123,362,4" data-entry="C00026" href="https://www.genome.jp/entry/C00026" id="E06FC97F" shape="circle" target="_blank" title="C00026 (2-Oxoglutarate)"/>
+    <area class="original" coords="1059,323,4" data-coords="1059,323,4" data-entry="C04882" href="https://www.genome.jp/entry/C04882" id="BAAF2EC6" shape="circle" target="_blank" title="C04882 (UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-6-carboxy-L-lysyl-D-alanyl-D-alanine)"/>
+    <area class="original" coords="951,519,4" data-coords="951,519,4" data-entry="C20278" href="https://www.genome.jp/entry/C20278" id="DD709BB1" shape="circle" target="_blank" title="C20278 ((2R,3R)-3-Methylornithinyl-N6-lysine)"/>
+    <area class="original" coords="857,492,4" data-coords="857,492,4" data-entry="C20277" href="https://www.genome.jp/entry/C20277" id="F4707DD9" shape="circle" target="_blank" title="C20277 ((2R,3R)-3-Methylornithine)"/>
+    <area class="original" coords="1055,519,4" data-coords="1055,519,4" data-entry="C20279" href="https://www.genome.jp/entry/C20279" id="ACAF38C1" shape="circle" target="_blank" title="C20279 ((2R,3R)-3-Methylglutamyl-5-semialdehyde-N6-lysine)"/>
+    <area class="original" coords="1121,519,4" data-coords="1121,519,4" data-entry="C16138" href="https://www.genome.jp/entry/C16138" id="98AF5176" shape="circle" target="_blank" title="C16138 (L-Pyrrolysine)"/>
+    <area class="original" coords="468,187,4" data-coords="468,187,4" data-entry="C20258" href="https://www.genome.jp/entry/C20258" id="FE700AED" shape="circle" target="_blank" title="C20258 ((2S,4S)-4-Hydroxy-2,3,4,5-tetrahydrodipicolinate)"/>
+    <area class="original" coords="648,243,694,260" data-coords="648,243,694,260" href="https://www.genome.jp/entry/K10206+2.6.1.83+R07613" id="9FC055BD" shape="rect" target="_blank" title="K10206 (E2.6.1.83), 2.6.1.83, R07613"/>
+    <area class="original" coords="754,464,800,481" data-coords="754,464,800,481" href="https://www.genome.jp/entry/K05831+3.5.1.130+R09779" id="D098B11E" shape="rect" target="_blank" title="K05831 (lysK), 3.5.1.130, R09779"/>
+    <area class="original" coords="707,495,753,512" data-coords="707,495,753,512" href="https://www.genome.jp/entry/K05830+2.6.1.118+R09778" id="5CAAB66A" shape="rect" target="_blank" title="K05830 (lysJ), 2.6.1.118, R09778"/>
+    <area class="original" coords="615,495,661,512" data-coords="615,495,661,512" href="https://www.genome.jp/entry/K05829+1.2.1.103+R09777" id="5DAD3DD6" shape="rect" target="_blank" title="K05829 (lysY), 1.2.1.103, R09777"/>
+    <area class="original" coords="522,495,568,512" data-coords="522,495,568,512" href="https://www.genome.jp/entry/K05828+2.7.2.17+R09776" id="E1AAF23D" shape="rect" target="_blank" title="K05828 (lysZ), 2.7.2.17, R09776"/>
+    <area class="original" coords="431,495,477,512" data-coords="431,495,477,512" href="https://www.genome.jp/entry/K05827+K25032+6.3.2.43+R09775" id="5FAD7EAE" shape="rect" target="_blank" title="K05827 (lysX), K25032 (K25032), 6.3.2.43, R09775"/>
+    <area class="original" coords="963,314,1009,331" data-coords="963,314,1009,331" href="https://www.genome.jp/entry/K01929+K15792+K01798+6.3.2.10+R04617" id="981867F1" shape="rect" target="_blank" title="K01929 (murF), K15792 (murEF), K01798 (alr-murF), 6.3.2.10, R04617"/>
+    <area class="original" coords="186,178,232,195" data-coords="186,178,232,195" href="https://www.genome.jp/entry/K00928+K12524+K12525+K12526+2.7.2.4+R00480" id="0D98A9F8" shape="rect" target="_blank" title="K00928 (lysC), K12524 (thrA), K12525 (metL), K12526 (lysAC), 2.7.2.4, R00480"/>
+    <area class="original" coords="289,178,335,195" data-coords="289,178,335,195" href="https://www.genome.jp/entry/K00133+1.2.1.11+R02291" id="899B29FD" shape="rect" target="_blank" title="K00133 (asd), 1.2.1.11, R02291"/>
+    <area class="original" coords="343,142,389,159" data-coords="343,142,389,159" href="https://www.genome.jp/entry/K00003+K12524+K12525+1.1.1.3+R01773+R01775" id="05B2A7B3" shape="rect" target="_blank" title="K00003 (hom), K12524 (thrA), K12525 (metL), 1.1.1.3, R01773, R01775"/>
+    <area class="original" coords="392,178,438,195" data-coords="392,178,438,195" href="https://www.genome.jp/entry/K01714+4.3.3.7+R10147" id="239DAC5F" shape="rect" target="_blank" title="K01714 (dapA), 4.3.3.7, R10147"/>
+    <area class="original" coords="496,178,542,195" data-coords="496,178,542,195" href="https://www.genome.jp/entry/K00215+1.17.1.8+R04198+R04199" id="1CA4FF69" shape="rect" target="_blank" title="K00215 (dapB), 1.17.1.8, R04198, R04199"/>
+    <area class="original" coords="648,314,694,331" data-coords="648,314,694,331" href="https://www.genome.jp/entry/K03340+1.4.1.16+R02755" id="B9BDD246" shape="rect" target="_blank" title="K03340 (dapdh), 1.4.1.16, R02755"/>
+    <area class="original" coords="619,111,665,128" data-coords="619,111,665,128" href="https://www.genome.jp/entry/K05822+2.3.1.89+R04364" id="E9ACDCF3" shape="rect" target="_blank" title="K05822 (dapH), 2.3.1.89, R04364"/>
+    <area class="original" coords="599,178,645,195" data-coords="599,178,645,195" href="https://www.genome.jp/entry/K00674+2.3.1.117+R04365" id="98A77F6E" shape="rect" target="_blank" title="K00674 (dapD), 2.3.1.117, R04365"/>
+    <area class="original" coords="760,111,806,128" data-coords="760,111,806,128" href="https://www.genome.jp/entry/K00841+R04467" id="8E915F14" shape="rect" target="_blank" title="K00841 (patA), R04467"/>
+    <area class="original" coords="702,178,748,195" data-coords="702,178,748,195" href="https://www.genome.jp/entry/K00821+K14267+2.6.1.17+R04475" id="32AC5A66" shape="rect" target="_blank" title="K00821 (argD), K14267 (dapC), 2.6.1.17, R04475"/>
+    <area class="original" coords="832,178,878,195" data-coords="832,178,878,195" href="https://www.genome.jp/entry/K05823+3.5.1.47+R02733" id="37BDD2B9" shape="rect" target="_blank" title="K05823 (dapL), 3.5.1.47, R02733"/>
+    <area class="original" coords="755,207,801,224" data-coords="755,207,801,224" href="https://www.genome.jp/entry/K01439+3.5.1.18+R02734" id="9691BC35" shape="rect" target="_blank" title="K01439 (dapE), 3.5.1.18, R02734"/>
+    <area class="original" coords="755,281,801,298" data-coords="755,281,801,298" href="https://www.genome.jp/entry/K01778+5.1.1.7+R02735" id="0098C41D" shape="rect" target="_blank" title="K01778 (dapF), 5.1.1.7, R02735"/>
+    <area class="original" coords="755,368,801,385" data-coords="755,368,801,385" href="https://www.genome.jp/entry/K01586+K12526+4.1.1.20+R00451" id="B0983D23" shape="rect" target="_blank" title="K01586 (lysA), K12526 (lysAC), 4.1.1.20, R00451"/>
+    <area class="original" coords="707,424,753,441" data-coords="707,424,753,441" href="https://www.genome.jp/entry/K00290+1.5.1.7+R00715" id="42ADB1FF" shape="rect" target="_blank" title="K00290 (LYS1), 1.5.1.7, R00715"/>
+    <area class="original" coords="615,424,661,441" data-coords="615,424,661,441" href="https://www.genome.jp/entry/K00293+K24034+1.5.1.10+R02315" id="43B0396B" shape="rect" target="_blank" title="K00293 (LYS9), K24034 (SPE3-LYS9), 1.5.1.10, R02315"/>
+    <area class="original" coords="522,424,568,441" data-coords="522,424,568,441" href="https://www.genome.jp/entry/K00143+1.2.1.95+R04390" id="C7ADEDD2" shape="rect" target="_blank" title="K00143 (LYS2), 1.2.1.95, R04390"/>
+    <area class="original" coords="387,461,433,478" data-coords="387,461,433,478" href="https://www.genome.jp/entry/K00143+1.2.1.95+R03098" id="E89D0A76" shape="rect" target="_blank" title="K00143 (LYS2), 1.2.1.95, R03098"/>
+    <area class="original" coords="334,485,380,502" data-coords="334,485,380,502" href="https://www.genome.jp/entry/K00825+K05825+K00838+2.6.1.39+R01939" id="D1AEEA36" shape="rect" target="_blank" title="K00825 (AADAT), K05825 (LYSN), K00838 (ARO8), 2.6.1.39, R01939"/>
+    <area class="original" coords="259,461,305,478" data-coords="259,461,305,478" href="https://www.genome.jp/entry/K05824+K10978+1.1.1.87+R01934" id="DD8B9C28" shape="rect" target="_blank" title="K05824 (LYS12), K10978 (aksF), 1.1.1.87, R01934"/>
+    <area class="original" coords="309,390,355,407" data-coords="309,390,355,407" href="https://www.genome.jp/entry/K01705+4.2.1.36+R04371" id="C49F846A" shape="rect" target="_blank" title="K01705 (LYS4), 4.2.1.36, R04371"/>
+    <area class="original" coords="146,353,192,370" data-coords="146,353,192,370" href="https://www.genome.jp/entry/K01655+K10977+2.3.3.14+R00271" id="8DB59435" shape="rect" target="_blank" title="K01655 (LYS21), K10977 (aksA), 2.3.3.14, R00271"/>
+    <area class="original" coords="431,424,477,441" data-coords="431,424,477,441" href="https://www.genome.jp/entry/K00143+1.2.1.95+R04863" id="45B07A43" shape="rect" target="_blank" title="K00143 (LYS2), 1.2.1.95, R04863"/>
+    <area class="original" coords="828,314,874,331" data-coords="828,314,874,331" href="https://www.genome.jp/entry/K01928+K15792+6.3.2.13+R02788" id="C3B8AF64" shape="rect" target="_blank" title="K01928 (murE), K15792 (murEF), 6.3.2.13, R02788"/>
+    <area class="original" coords="571,193,571,318,573,318,573,193" data-coords="571,193,571,318,573,318,573,193" href="https://www.genome.jp/entry/R04336" id="9715F982" shape="poly" target="_blank" title="R04336"/>
+    <area class="original" coords="334,506,380,523" data-coords="334,506,380,523" href="https://www.genome.jp/entry/K00838+2.6.1.57+R01939" id="EAB1644E" shape="rect" target="_blank" title="K00838 (ARO8), 2.6.1.57, R01939"/>
+    <area class="original" coords="237,364,283,381" data-coords="237,364,283,381" href="https://www.genome.jp/entry/K16792+K16793+4.2.1.114+R03444" id="28B40946" shape="rect" target="_blank" title="K16792 (aksD), K16793 (aksE), 4.2.1.114, R03444"/>
+    <area class="original" coords="309,461,355,478" data-coords="309,461,355,478" href="https://www.genome.jp/entry/K17753+1.1.1.286+R01934" id="DDA700F3" shape="rect" target="_blank" title="K17753 (HICDH), 1.1.1.286, R01934"/>
+    <area class="original" coords="259,390,305,407" data-coords="259,390,305,407" href="https://www.genome.jp/entry/K16792+K16793+4.2.1.114+R04371" id="C4841F9F" shape="rect" target="_blank" title="K16792 (aksD), K16793 (aksE), 4.2.1.114, R04371"/>
+    <area class="original" coords="877,511,923,528" data-coords="877,511,923,528" href="https://www.genome.jp/entry/K16181+6.3.2.59+R10011" id="029FB799" shape="rect" target="_blank" title="K16181 (pylC), 6.3.2.59, R10011"/>
+    <area class="original" coords="974,511,1020,528" data-coords="974,511,1020,528" href="https://www.genome.jp/entry/K16182+R10012" id="9B1DB3EB" shape="rect" target="_blank" title="K16182 (pylD), R10012"/>
+    <area class="original" coords="834,451,880,468" data-coords="834,451,880,468" href="https://www.genome.jp/entry/K16180+5.4.99.58+R10010" id="85C123BF" shape="rect" target="_blank" title="K16180 (pylB), 5.4.99.58, R10010"/>
+    <area class="original" coords="1059,518,1115,518,1115,520,1059,520" data-coords="1059,518,1115,518,1115,520,1059,520" href="https://www.genome.jp/entry/R10013" id="F2C96B14" shape="poly" target="_blank" title="R10013"/>
+    <area class="original" coords="237,343,283,360" data-coords="237,343,283,360" href="https://www.genome.jp/entry/K17450+R03444" id="0FB2074C" shape="rect" target="_blank" title="K17450 (ACO2), R03444"/>
+    <area class="original" coords="917,416,1079,450" data-coords="917,416,1079,450" data-entry="map00960" href="https://www.genome.jp/pathway/map00960" id="99AE3CAF" shape="rect" target="_blank" title="map00960: Tropane, piperidine and pyridine alkaloid biosynthesis"/>
+    <area class="original" coords="1109,306,1197,340" data-coords="1109,306,1197,340" data-entry="map00550" href="https://www.genome.jp/pathway/map00550" id="FF5E2FBA" shape="rect" target="_blank" title="map00550: Peptidoglycan biosynthesis"/>
+    <area class="original" coords="422,97,545,131" data-coords="422,97,545,131" data-entry="map00260" href="https://www.genome.jp/pathway/map00260" id="17ADC575" shape="rect" target="_blank" title="map00260: Glycine, serine and threonine metabolism"/>
+    <area class="original" coords="86,303,162,328" data-coords="86,303,162,328" data-entry="map00020" href="https://www.genome.jp/pathway/map00020" id="92CC2DD9" shape="rect" target="_blank" title="map00020: Citrate cycle (TCA cycle)"/>
+    <area class="original" coords="107,223,235,257" data-coords="107,223,235,257" data-entry="map00250" href="https://www.genome.jp/pathway/map00250" id="0E9521FF" shape="rect" target="_blank" title="map00250: Alanine, aspartate and glutamate metabolism"/>
+    <area class="original" coords="40,45,212,70" data-coords="40,45,212,70" data-entry="map00300" href="https://www.genome.jp/entry/map00300" id="37B2A6CE" shape="rect" target="_blank" title="map00300: Lysine biosynthesis"/>
+    <area class="original" coords="171,456,248,490" data-coords="171,456,248,490" data-entry="map00620" href="https://www.genome.jp/pathway/map00620" id="6D9F367E" shape="rect" target="_blank" title="map00620: Pyruvate metabolism"/>
+    <area class="original" coords="101,427,171,452" data-coords="101,427,171,452" data-entry="map00010" href="https://www.genome.jp/pathway/map00010" id="81AA02F0" shape="rect" target="_blank" title="map00010: Glycolysis / Gluconeogenesis"/>
+    <area class="original" coords="917,373,992,407" data-coords="917,373,992,407" data-entry="map00310" href="https://www.genome.jp/pathway/map00310" id="33C21CE1" shape="rect" target="_blank" title="map00310: Lysine degradation"/>
+   </map>
+   <map data-scale="1" id="module_mapdata" name="module_mapdata">
+    <area class="module" coords="690,432,771,432,771,434,690,434" data-coords="690,432,771,432,771,434,690,434" data-module="M00030" data-refid="931A1A7B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="771,433,762,436,762,429" data-coords="771,433,762,436,762,429" data-module="M00030" data-refid="FF6767DB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="690,433,698,429,698,436" data-coords="690,433,698,429,698,436" data-module="M00030" data-refid="6236869F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="776,439,776,499,778,499,778,439" data-coords="776,439,776,499,778,499,778,439" data-module="M00031" data-refid="B81C86CB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="777,439,780,447,773,447" data-coords="777,439,780,447,773,447" data-module="M00031" data-refid="00D86DE0" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="598,503,679,503,679,505,598,505" data-coords="598,503,679,503,679,505,598,505" data-module="M00031" data-refid="BD181109" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="679,504,670,507,670,500" data-coords="679,504,670,507,670,500" data-module="M00031" data-refid="CCAC8CA9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="690,503,771,503,771,505,690,505" data-coords="690,503,771,503,771,505,690,505" data-module="M00031" data-refid="AD1A9AF5" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="771,504,762,507,762,500" data-coords="771,504,762,507,762,500" data-module="M00031" data-refid="82C9E8EA" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="506,503,587,503,587,505,506,505" data-coords="506,503,587,503,587,505,506,505" data-module="M00031" data-refid="B917E224" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="587,504,578,507,578,500" data-coords="587,504,578,507,578,500" data-module="M00031" data-refid="21CD326D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="414,503,495,503,495,505,414,505" data-coords="414,503,495,503,495,505,414,505" data-module="M00031" data-refid="B5155AA9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="495,504,486,507,486,500" data-coords="495,504,486,507,486,500" data-module="M00031" data-refid="776AC42C" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="598,432,679,432,679,434,598,434" data-coords="598,432,679,432,679,434,598,434" data-module="M00030" data-refid="A317908F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="679,433,670,436,670,429" data-coords="679,433,670,436,670,429" data-module="M00030" data-refid="494A0B9F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="598,433,606,429,606,436" data-coords="598,433,606,429,606,436" data-module="M00030" data-refid="29052A63" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="506,432,587,432,587,434,506,434" data-coords="506,432,587,432,587,434,506,434" data-module="M00030" data-refid="9F1761AA" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="587,433,578,436,578,429" data-coords="587,433,578,436,578,429" data-module="M00030" data-refid="9E6AB15E" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="414,432,495,432,495,434,414,434" data-coords="414,432,495,432,495,434,414,434" data-module="M00030" data-refid="9B14DA2F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="495,433,486,436,486,429" data-coords="495,433,486,436,486,429" data-module="M00030" data-refid="F408431D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="408,439,408,499,410,499,410,439" data-coords="408,439,408,499,410,499,410,439" data-module="M00030" data-refid="BC14D70A" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="409,439,412,447,405,447" data-coords="409,439,412,447,405,447" data-module="M00030" data-refid="82F0DB1D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="312,503,403,503,403,505,312,505" data-coords="312,503,403,503,403,505,312,505" data-module="M00030" data-refid="B112E8C3" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="403,504,394,507,394,500" data-coords="403,504,394,507,394,500" data-module="M00030" data-refid="87F65627" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="312,504,320,500,320,507" data-coords="312,504,320,500,320,507" data-module="M00030" data-refid="5B8E70EB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="306,439,306,499,308,499,308,439" data-coords="306,439,306,499,308,499,308,439" data-module="M00030+M00433+M00608" data-refid="B8124D05" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="307,499,303,490,310,490" data-coords="307,499,303,490,310,490" data-module="M00030+M00433+M00608" data-refid="DA881EDC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="307,439,310,447,303,447" data-coords="307,439,310,447,303,447" data-module="M00030+M00433+M00608" data-refid="CBD76CDC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="306,368,306,428,308,428,308,368" data-coords="306,368,306,428,308,428,308,368" data-module="M00030+M00433+M00608" data-refid="9E11D159" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="307,428,303,419,310,419" data-coords="307,428,303,419,310,419" data-module="M00030+M00433+M00608" data-refid="C89F97DC" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="307,368,310,376,303,376" data-coords="307,368,310,376,303,376" data-module="M00030+M00433+M00608" data-refid="4875E1D2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="220,361,301,361,301,363,220,363" data-coords="220,361,301,361,301,363,220,363" data-module="M00030+M00433+M00608" data-refid="790F603B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="301,362,292,365,292,358" data-coords="301,362,292,365,292,358" data-module="M00030+M00433+M00608" data-refid="CA18DBCD" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="220,362,228,358,228,365" data-coords="220,362,228,358,228,365" data-module="M00030+M00433+M00608" data-refid="A9D3FA91" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="134,380,134,371,134,371,134,369,134,369,135,368,135,368,135,366,135,366,136,365,136,365,137,364,137,364,138,363,139,362,141,362,140,363,141,362,142,361,144,361,144,361,148,361,148,363,144,363,144,363,142,363,143,362,142,363,141,364,139,364,140,363,139,364,139,364,138,365,138,365,137,366,137,366,137,368,137,368,136,369,136,369,136,371,136,371,136,380" data-coords="134,380,134,371,134,371,134,369,134,369,135,368,135,368,135,366,135,366,136,365,136,365,137,364,137,364,138,363,139,362,141,362,140,363,141,362,142,361,144,361,144,361,148,361,148,363,144,363,144,363,142,363,143,362,142,363,141,364,139,364,140,363,139,364,139,364,138,365,138,365,137,366,137,366,137,368,137,368,136,369,136,369,136,371,136,371,136,380" data-module="M00030+M00433+M00608" data-refid="6516D329" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="128,361,209,361,209,363,128,363" data-coords="128,361,209,361,209,363,128,363" data-module="M00030+M00433+M00608" data-refid="890CD64F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="209,362,200,365,200,358" data-coords="209,362,200,365,200,358" data-module="M00030+M00433+M00608" data-refid="90E77F91" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="776,328,776,428,778,428,778,328" data-coords="776,328,776,428,778,428,778,328" data-module="M00016+M00525+M00526+M00527" data-refid="9E1C092B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="777,428,773,419,780,419" data-coords="777,428,773,419,780,419" data-module="M00016+M00525+M00526+M00527" data-refid="FDA098DB" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="577,322,771,322,771,324,577,324" data-coords="577,322,771,322,771,324,577,324" data-module="M00526" data-refid="FE172226" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="771,323,762,326,762,319" data-coords="771,323,762,326,762,319" data-module="M00526" data-refid="71DC67D1" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="577,323,585,319,585,326" data-coords="577,323,585,319,585,326" data-module="M00526" data-refid="05137354" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="776,258,776,318,778,318,778,258" data-coords="776,258,776,318,778,318,778,258" data-module="M00016+M00525+M00527" data-refid="9E1B889D" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="777,318,773,309,780,309" data-coords="777,318,773,309,780,309" data-module="M00016+M00525+M00527" data-refid="701598D1" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="777,258,780,266,773,266" data-coords="777,258,780,266,773,266" data-module="M00016+M00525+M00527" data-refid="EFEBE2C2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="783,251,845,251,845,251,847,251,846,252,847,251,848,250,850,250,849,251,850,250,850,250,851,249,851,249,852,248,852,248,852,246,852,246,853,245,853,245,853,243,853,243,853,126,855,126,855,243,855,243,855,245,855,245,854,246,854,246,854,248,854,248,853,249,853,249,852,250,852,250,851,251,850,252,848,252,849,251,848,252,847,253,845,253,845,253,783,253" data-coords="783,251,845,251,845,251,847,251,846,252,847,251,848,250,850,250,849,251,850,250,850,250,851,249,851,249,852,248,852,248,852,246,852,246,853,245,853,245,853,243,853,243,853,126,855,126,855,243,855,243,855,245,855,245,854,246,854,246,854,248,854,248,853,249,853,249,852,250,852,250,851,251,850,252,848,252,849,251,848,252,847,253,845,253,845,253,783,253" data-module="M00525" data-refid="48D1F0AE" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="854,126,857,134,850,134" data-coords="854,126,857,134,850,134" data-module="M00525" data-refid="FA3989F4" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="783,252,791,248,791,255" data-coords="783,252,791,248,791,255" data-module="M00525" data-refid="FC360CC2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="577,193,577,243,577,243,577,245,577,245,578,246,578,246,578,248,578,248,579,249,579,249,580,250,580,250,581,251,582,250,584,250,583,251,584,252,585,251,587,251,587,251,771,251,771,253,587,253,587,253,585,253,586,252,585,251,584,252,582,252,583,251,582,250,582,250,581,249,581,249,580,248,580,248,580,246,580,246,579,245,579,245,579,243,579,243,579,193" data-coords="577,193,577,243,577,243,577,245,577,245,578,246,578,246,578,248,578,248,579,249,579,249,580,250,580,250,581,251,582,250,584,250,583,251,584,252,585,251,587,251,587,251,771,251,771,253,587,253,587,253,585,253,586,252,585,251,584,252,582,252,583,251,582,250,582,250,581,249,581,249,580,248,580,248,580,246,580,246,579,245,579,245,579,243,579,243,579,193" data-module="M00527" data-refid="A6BB3942" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="771,252,762,255,762,248" data-coords="771,252,762,255,762,248" data-module="M00527" data-refid="EE7ADCC2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="578,193,581,201,574,201" data-coords="578,193,581,201,574,201" data-module="M00527" data-refid="1A13E23B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="722,119,848,119,848,121,722,121" data-coords="722,119,848,119,848,121,722,121" data-module="M00525" data-refid="621B0C9C" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="848,120,839,123,839,116" data-coords="848,120,839,123,839,116" data-module="M00525" data-refid="ED08C7F4" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="571,182,571,129,571,129,571,127,571,127,572,126,572,126,572,124,572,124,573,123,573,123,574,122,574,122,575,121,576,120,578,120,577,121,578,120,579,119,581,119,581,119,711,119,711,121,581,121,581,121,579,121,580,120,579,121,578,122,576,122,577,121,576,122,576,122,575,123,575,123,574,124,574,124,574,126,574,126,573,127,573,127,573,129,573,129,573,182" data-coords="571,182,571,129,571,129,571,127,571,127,572,126,572,126,572,124,572,124,573,123,573,123,574,122,574,122,575,121,576,120,578,120,577,121,578,120,579,119,581,119,581,119,711,119,711,121,581,121,581,121,579,121,580,120,579,121,578,122,576,122,577,121,576,122,576,122,575,123,575,123,574,124,574,124,574,126,574,126,573,127,573,127,573,129,573,129,573,182" data-module="M00525" data-refid="D9FE9FFD" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="711,120,702,123,702,116" data-coords="711,120,702,123,702,116" data-module="M00525" data-refid="0F8AC6B8" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="776,191,776,246,778,246,778,191" data-coords="776,191,776,246,778,246,778,191" data-module="M00016" data-refid="ED1B089B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="777,246,773,237,780,237" data-coords="777,246,773,237,780,237" data-module="M00016" data-refid="ECB182C2" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="680,186,771,186,771,188,680,188" data-coords="680,186,771,186,771,188,680,188" data-module="M00016" data-refid="FB189494" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="771,187,762,190,762,183" data-coords="771,187,762,190,762,183" data-module="M00016" data-refid="6B418FB8" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="680,187,688,183,688,190" data-coords="680,187,688,183,688,190" data-module="M00016" data-refid="C159AE77" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="577,186,668,186,668,188,577,188" data-coords="577,186,668,186,668,188,577,188" data-module="M00016" data-refid="8916081E" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="668,187,659,190,659,183" data-coords="668,187,659,190,659,183" data-module="M00016" data-refid="A7E39077" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="474,186,565,186,565,188,474,188" data-coords="474,186,565,186,565,188,474,188" data-module="M00016+M00525+M00526+M00527" data-refid="03137E19" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="565,187,556,190,556,183" data-coords="565,187,556,190,556,183" data-module="M00016+M00525+M00526+M00527" data-refid="F0BD6B36" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="370,186,461,186,461,188,370,188" data-coords="370,186,461,186,461,188,370,188" data-module="M00016+M00525+M00526+M00527" data-refid="FB10F40A" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="461,187,452,190,452,183" data-coords="461,187,452,190,452,183" data-module="M00016+M00525+M00526+M00527" data-refid="398A8EFA" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="267,186,358,186,358,188,267,188" data-coords="267,186,358,186,358,188,267,188" data-module="M00016+M00525+M00526+M00527" data-refid="890E6794" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="358,187,349,190,349,183" data-coords="358,187,349,190,349,183" data-module="M00016+M00525+M00526+M00527" data-refid="762C8FB9" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="164,186,255,186,255,188,164,188" data-coords="164,186,255,186,255,188,164,188" data-module="M00016+M00525+M00526+M00527" data-refid="030BDD8F" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="255,187,246,190,246,183" data-coords="255,187,246,190,246,183" data-module="M00016+M00525+M00526+M00527" data-refid="BF066A78" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="648,243,694,260" data-coords="648,243,694,260" data-module="M00527" data-refid="9FC055BD" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="777,504,4" data-coords="777,504,4" data-module="M00031" data-refid="F67069DE" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="685,504,4" data-coords="685,504,4" data-module="M00031" data-refid="EC7050F7" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="593,504,4" data-coords="593,504,4" data-module="M00031" data-refid="E2703810" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="501,504,4" data-coords="501,504,4" data-module="M00031" data-refid="D870372F" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="754,464,800,481" data-coords="754,464,800,481" data-module="M00031" data-refid="D098B11E" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="707,495,753,512" data-coords="707,495,753,512" data-module="M00031" data-refid="5CAAB66A" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="615,495,661,512" data-coords="615,495,661,512" data-module="M00031" data-refid="5DAD3DD6" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="522,495,568,512" data-coords="522,495,568,512" data-module="M00031" data-refid="E1AAF23D" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="431,495,477,512" data-coords="431,495,477,512" data-module="M00031" data-refid="5FAD7EAE" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="186,178,232,195" data-coords="186,178,232,195" data-module="M00016+M00525+M00526+M00527" data-refid="0D98A9F8" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="289,178,335,195" data-coords="289,178,335,195" data-module="M00016+M00525+M00526+M00527" data-refid="899B29FD" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="392,178,438,195" data-coords="392,178,438,195" data-module="M00016+M00525+M00526+M00527" data-refid="239DAC5F" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="496,178,542,195" data-coords="496,178,542,195" data-module="M00016+M00525+M00526+M00527" data-refid="1CA4FF69" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="648,314,694,331" data-coords="648,314,694,331" data-module="M00526" data-refid="B9BDD246" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="619,111,665,128" data-coords="619,111,665,128" data-module="M00525" data-refid="E9ACDCF3" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="599,178,645,195" data-coords="599,178,645,195" data-module="M00016" data-refid="98A77F6E" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="760,111,806,128" data-coords="760,111,806,128" data-module="M00525" data-refid="8E915F14" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="702,178,748,195" data-coords="702,178,748,195" data-module="M00016" data-refid="32AC5A66" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="832,178,878,195" data-coords="832,178,878,195" data-module="M00525" data-refid="37BDD2B9" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="755,207,801,224" data-coords="755,207,801,224" data-module="M00016" data-refid="9691BC35" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="755,281,801,298" data-coords="755,281,801,298" data-module="M00016+M00525+M00527" data-refid="0098C41D" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="755,368,801,385" data-coords="755,368,801,385" data-module="M00016+M00525+M00526+M00527" data-refid="B0983D23" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="707,424,753,441" data-coords="707,424,753,441" data-module="M00030" data-refid="42ADB1FF" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="615,424,661,441" data-coords="615,424,661,441" data-module="M00030" data-refid="43B0396B" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="522,424,568,441" data-coords="522,424,568,441" data-module="M00030" data-refid="C7ADEDD2" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="387,461,433,478" data-coords="387,461,433,478" data-module="M00030" data-refid="E89D0A76" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="334,485,380,502" data-coords="334,485,380,502" data-module="M00030" data-refid="D1AEEA36" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="259,461,305,478" data-coords="259,461,305,478" data-module="M00030+M00433+M00608" data-refid="DD8B9C28" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="309,390,355,407" data-coords="309,390,355,407" data-module="M00030+M00433" data-refid="C49F846A" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="146,353,192,370" data-coords="146,353,192,370" data-module="M00030+M00433+M00608" data-refid="8DB59435" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="431,424,477,441" data-coords="431,424,477,441" data-module="M00030" data-refid="45B07A43" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="159,187,4" data-coords="159,187,4" data-module="M00016+M00525+M00526+M00527" data-refid="036FBFD9" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="262,187,4" data-coords="262,187,4" data-module="M00016+M00525+M00526+M00527" data-refid="E06FD8ED" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="365,187,4" data-coords="365,187,4" data-module="M00016+M00525+M00526+M00527" data-refid="EF6FF1ED" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="572,187,4" data-coords="572,187,4" data-module="M00016+M00525+M00526+M00527" data-refid="E0702406" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="717,120,4" data-coords="717,120,4" data-module="M00525" data-refid="F2705552" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="854,120,4" data-coords="854,120,4" data-module="M00525" data-refid="E3706EB6" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="674,187,4" data-coords="674,187,4" data-module="M00016" data-refid="EA703D06" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="777,187,4" data-coords="777,187,4" data-module="M00016" data-refid="F9705606" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="777,252,4" data-coords="777,252,4" data-module="M00016+M00525+M00527" data-refid="F4705AF7" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="777,323,4" data-coords="777,323,4" data-module="M00016+M00525+M00526+M00527" data-refid="F5705FE8" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="572,323,4" data-coords="572,323,4" data-module="M00526" data-refid="DC702DE8" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="777,433,4" data-coords="777,433,4" data-module="M00016+M00525+M00526+M00527+M00030+M00031" data-refid="F57064ED" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="685,433,4" data-coords="685,433,4" data-module="M00030" data-refid="EB704C06" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="593,433,4" data-coords="593,433,4" data-module="M00030" data-refid="E170331F" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="501,433,4" data-coords="501,433,4" data-module="M00030" data-refid="D770323E" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="409,433,4" data-coords="409,433,4" data-module="M00030" data-refid="FF70193E" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="409,504,4" data-coords="409,504,4" data-module="M00030+M00031" data-refid="00701E34" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="307,504,4" data-coords="307,504,4" data-module="M00030+M00433+M00608" data-refid="F670052F" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="307,433,4" data-coords="307,433,4" data-module="M00030+M00433+M00608" data-refid="F570003E" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="307,362,4" data-coords="307,362,4" data-module="M00030+M00433+M00608" data-refid="F46FFB4D" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="215,362,4" data-coords="215,362,4" data-module="M00030+M00433+M00608" data-refid="EA6FE266" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="135,385,4" data-coords="135,385,4" data-module="M00030+M00433+M00608" data-refid="ED6FC9A2" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="123,362,4" data-coords="123,362,4" data-module="M00030+M00433+M00608" data-refid="E06FC97F" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="571,193,571,318,573,318,573,193" data-coords="571,193,571,318,573,318,573,193" data-module="M00526" data-refid="9715F982" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="572,318,568,309,575,309" data-coords="572,318,568,309,575,309" data-module="M00526" data-refid="01591954" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="572,193,575,201,568,201" data-coords="572,193,575,201,568,201" data-module="M00526" data-refid="194AAC3B" href="javascript:void(0)" shape="poly" target="_blank"/>
+    <area class="module" coords="334,506,380,523" data-coords="334,506,380,523" data-module="M00030" data-refid="EAB1644E" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="237,364,283,381" data-coords="237,364,283,381" data-module="M00433+M00608" data-refid="28B40946" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="259,390,305,407" data-coords="259,390,305,407" data-module="M00433+M00608" data-refid="C4841F9F" href="javascript:void(0)" shape="rect" target="_blank"/>
+    <area class="module" coords="468,187,4" data-coords="468,187,4" data-module="M00016+M00525+M00526+M00527" data-refid="FE700AED" href="javascript:void(0)" shape="circle" target="_blank"/>
+    <area class="module" coords="237,343,283,360" data-coords="237,343,283,360" data-module="M00030+M00433" data-refid="0FB2074C" href="javascript:void(0)" shape="rect" target="_blank"/>
+   </map>
+  </div>
+  <!-- pathway image end -->
+  <!-- control panel start -->
+  <div id="controlPanel">
+   <div class="controller">
+    <div class="feature option">
+     <h5>
+      Option
+     </h5>
+     <div>
+      <div class="row scale">
+       <span class="title">
+        Scale:
+       </span>
+       <span class="content">
+        <input max="1" min="0.1" step="0.1" type="range" value="1"/>
+        <span class="label">
+         100%
+        </span>
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="feature search">
+     <h5>
+      Search
+     </h5>
+     <div>
+      <div class="row query">
+       <form>
+        <input autocomplete="off" name="query" style="width:130px;" type="text" value=""/>
+        <input type="submit" value="Go"/>
+        <span class="ui-icon button ui-icon-close clear-query hidden">
+        </span>
+       </form>
+      </div>
+      <div class="row result">
+      </div>
+     </div>
+    </div>
+    <div class="feature search-pathway">
+     <h5>
+      ID search
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <form>
+       <div class="row" style="display:grid; grid-template-columns:135px 1fr; column-gap:5px;">
+        <div>
+         <textarea class="query" rows="2" style="width:130px; resize:none;"></textarea>
+        </div>
+        <div>
+         <input class="submit" type="submit" value="Go"/>
+         <span class="ui-icon button ui-icon-close clear-query hidden">
+         </span>
+        </div>
+       </div>
+      </form>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature color-pathway">
+     <h5>
+      Color
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature">
+     <h5>
+      Module
+     </h5>
+     <div>
+      <div class="row">
+       <ul class="tree module-tree">
+        <li class="classification class-A ">
+         <span>
+          <input type="checkbox"/>
+          Pathway modules
+         </span>
+         <ul>
+          <li class="classification class-B ">
+           <span>
+            <input type="checkbox"/>
+            Energy metabolism
+           </span>
+           <ul>
+            <li class="classification class-C ">
+             <span>
+              <input type="checkbox"/>
+              Methane metabolism
+             </span>
+             <ul>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00608" href="/module/M00608" target="_blank">
+                 M00608
+                </a>
+                2-Oxocarboxylic acid chain extension
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+          <li class="classification class-B ">
+           <span>
+            <input type="checkbox"/>
+            Amino acid metabolism
+           </span>
+           <ul>
+            <li class="classification class-C ">
+             <span>
+              <input type="checkbox"/>
+              Lysine metabolism
+             </span>
+             <ul>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00016" href="/module/M00016" target="_blank">
+                 M00016
+                </a>
+                Lysine biosynthesis, succinyl-DAP pathway
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00525" href="/module/M00525" target="_blank">
+                 M00525
+                </a>
+                Lysine biosynthesis, acetyl-DAP pathway
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00526" href="/module/M00526" target="_blank">
+                 M00526
+                </a>
+                Lysine biosynthesis, DAP dehydrogenase pathway
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00527" href="/module/M00527" target="_blank">
+                 M00527
+                </a>
+                Lysine biosynthesis, DAP aminotransferase pathway
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00030" href="/module/M00030" target="_blank">
+                 M00030
+                </a>
+                Lysine biosynthesis, AAA pathway
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00433" href="/module/M00433" target="_blank">
+                 M00433
+                </a>
+                Lysine biosynthesis
+               </span>
+              </li>
+              <li class="entry class-D module complete">
+               <span>
+                <input type="checkbox"/>
+                <a data-entry="M00031" href="/module/M00031" target="_blank">
+                 M00031
+                </a>
+                Lysine biosynthesis, mediated by LysW
+               </span>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+   <button class="close">
+    <img src="/Fig/left_triangle_12x12.png"/>
+   </button>
+   <button class="open">
+    <img src="/Fig/right_triangle_12x12.png"/>
+   </button>
+  </div>
+  <!-- control panel end -->
+  <form action="/kegg-bin/download" id="downloadForm" method="post">
+   <input name="name" type="hidden" value="map00300.png"/>
+   <input name="content" type="hidden"/>
+   <input name="decode" type="hidden" value="base64"/>
+  </form>
+  <div id="waiting-circle">
+   <img src="/Fig/waiting-circle-small.gif"/>
+  </div>
+  <!-- pathway image url start -->
+  <form class="imageset" data-name="">
+   <input data-situation="1x" data-src="/kegg/pathway/map/map00300.png" name="image_normal" type="hidden" value="/kegg/pathway/map/map00300.png 1x"/>
+  </form>
+  <!-- pathway image url end -->
+ </body>
+</html>
