@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+ <!--
+ENTRY       map04136
+DEFINITION  Autophagy - other
+--->
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   KEGG PATHWAY: Autophagy - other + Reference pathway
+  </title>
+  <link href="/css/jquery-ui.css" rel="stylesheet"/>
+  <style type="text/css">
+   <!--
+
+h1.page-title {
+	font-size: 14px;
+	margin: 0px;
+	white-space: nowrap;
+}
+h1.page-title * {
+	vertical-align: middle;
+}
+
+input, select {
+	margin: 0px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/** navigation start **/
+.nav {
+	padding: 3px 0px 5px 0px;
+	position: relative;
+	min-width: 600px;
+	max-width: 800px;
+	background: #fff;
+}
+
+.nav form {
+	margin: 5px 0px 0px 0px;
+}
+
+.nav .help {
+	display: inline-block;
+	position: relative;
+	left: 20px;
+/*
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+*/
+}
+/** navigation end **/
+
+#description {
+	padding: 10px;
+	width: 800px;
+}
+
+#waiting-circle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	display: none;
+}
+
+#controlPanel {
+	top: 0px;
+	left: 0px;
+	width: 220px;
+	background: #ffffff;
+	padding: 0px 0px 0px 0px;
+	white-space: nowrap;
+	overflow: auto;
+	position: fixed;
+	border: solid 1px #999999;
+	display: none;
+}
+
+#controlPanel.closed {
+	border: none;
+	padding: 0px 0px 0px 0px;
+	background: transparent;
+
+	/* jQuery-UI resizale.disabled() の実行で
+	 *      色が薄くなるのを打ち消す */
+	opacity: 1.0;
+}
+
+/** div.row start **/
+
+div.row {
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/* 以下のwidth,overflowの定義で.rowのブロック内で横スクロールする。 */
+	/*
+	width: 98%;
+	overflow: auto;
+	*/
+}
+
+div.row * {
+	vertical-align: middle;
+}
+
+/* 横に並べる場合(title可変幅) start */
+
+.row.scale input {
+	width: 110px;
+}
+
+.row.scale .label {
+	font-size: 0.9em;
+}
+
+/* 横に並べる場合(title可変幅) end */
+
+
+/* Search欄の検索結果 start */
+
+div.row.result > div {
+	margin: 5px 1px 2px 1px;
+}
+
+/* Search欄の検索結果 end */
+
+/**  div.row end **/
+
+#controlPanel h5 {
+  margin: 0px;
+	padding: 5px 0px 5px 10px;
+	vertical-align: middle;
+	border-top: solid 1px #cccccc;
+	border-bottom: solid 1px #cccccc;
+	background: #eeeeee;
+	/* ui-iconの位置調整のために必要 */
+	position: relative;
+}
+
+#controlPanel h5::before {
+	content: url(/Fig/get_htext/open.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5.closed::before {
+	content: url(/Fig/get_htext/close.png);
+	margin: 0px 5px 0px 0px;
+}
+
+#controlPanel h5:first-child {
+	border-top: none;
+}
+
+#controlPanel h5:hover {
+	cursor: pointer;
+}
+
+#controlPanel h5  + div {
+	padding: 5px 0px 5px 10px;
+}
+
+#controlPanel h5 .ui-icon {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	margin-top: -8px;
+	cursor: pointer;
+}
+
+button {
+	/* Safariでボタンの周りに入る余白を削除 */
+	margin: 0px;
+	padding: 0px;
+	/* ボタンを押した時に表示されるボーダーを非表示にする */
+	outline: none;
+}
+
+button.close, button.open {
+	border: none;
+	padding: 0px;
+	position: absolute;
+	right: 5px;
+	top: 7px;
+}
+
+button.close {
+	/* コントロールパネルに合わせて初期は非表示 */
+	display: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+button img {
+	/* 画像の下に入る余白を無くす */
+	display: block;
+}
+
+/** tree style start **/
+ul.tree, ul.tree ul {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.tree ul {
+	padding-left: 12px;
+}
+
+ul.tree .class-A > span {
+	font-weight: bold;
+}
+
+ul.tree li {
+	margin: 3px 0px 3px 0px;
+}
+
+.module-tree .module.disabled {
+	display: none;
+}
+
+.module-tree .classification.disabled {
+	display: none;
+}
+
+/** tree style > User data start **/
+ul.mappers {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.mappers li {
+	position: relative;
+	margin: 5px 0px 2px 0px;
+}
+
+ul.mappers li .ui-icon {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+}
+ul.mappers li .ui-icon:hover {
+	cursor: pointer;
+}
+ul.mappers li .ui-icon-trash {
+	right: 5px;
+}
+ul.mappers li .ui-icon-document {
+	right: 26px;
+}
+/** tree style > User data end **/
+
+/** tree style end **/
+
+.ui-icon.button {
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul.simple {
+	margin: 0px;
+	padding: 0px;
+}
+ul.simple li {
+	list-style-type: none;
+}
+ul.simple li:not(:first-child) {
+	margin-top: 5px;
+}
+
+//-->
+   body {font-size:12px; font-family:verdana,arial,helvetica,sans-serif; background-color:#ffffff}
+.text {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+b {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+th {font-size:12px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+td {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+input {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+select {font-size:12px; font-family:verdana,arial,helvetica,sans-serif}
+a {text-decoration:none}
+a:link {color:#003399}
+a:visited {color:#003399}
+a:hover {color:#33cc99}
+font.title3 {color: #005050; font-size:14px; font-weight:bold; font-family:verdana,arial,helvetica,sans-serif}
+hr.frame0 {border: 1px solid #f5e05f; color: #f5e05f}
+  </style>
+  <script src="/js/jquery-3.1.0.min.js">
+  </script>
+  <script src="/js/jquery-ui.js">
+  </script>
+  <script src="/js/jquery.balloon.min.js">
+  </script>
+  <script src="/js/lz-string.min.js">
+  </script>
+  <script src="/kegg-bin/get_data.cgi?data=0021&amp;id=show_pathway.merged.js&amp;v2.09">
+  </script>
+  <script type="text/javascript">
+   <!--
+
+// common variable
+const env = {
+	       mapno: '04136',
+	         org: 'map',
+	       entry: 'map04136',
+	       scale: 1,
+	 colorModule: '',
+	personalConf: '',
+}
+
+// HELP button
+function btn(bobj,img) { bobj.src = "/Fig/bget/button_" + img + ".gif"; }
+
+//-->
+  </script>
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVR4AXSTA8wdQRSFv9q2bdu2bbth7QZF9ILatm3btvvbtnWS7D5/ye744szcbKdzzMnAhtVji/C7TUtE7VdvKfn8BmK+d3tckR1gY+XnOKLDMjS3T4g+ag3zdm3A8fD6k1GIFqNjSJg0kUk7AvXR9MwNev856mTIKQVx4Xx2jvfcgUCr2dQCBSAxMjdnVhRn561SSovsOCAPOqwD+hJTcvPtR3G1EAt5iyaT1CYvRupOBuruuYcwDk9/PIP3e3Pz719BKIhgVJcQDHLaaiCx5EGetPnowfK8u1uIfoUg9FEuvlHc5S2YNJ+ZbM5GeRTgwNpCLOl52pxXJLNHVdCHcNKgRo1YiAfyw8cLBRETh/rToE44TYfFmrm7jEDhG0jpXTWHU2VjRwyKlIlj5lRPdp/xszegMPQ1Cm1G3lzJ2HLCqxsSD7lJB0X34kthDKSf3TvQQ5Enbf72qzhKKW/OZDPOqKACXLYUci/imUelUP6iQd1wu4gSk3ObuojKteQXcqp4VDCh7fvxO8bC/csPOD54B7Z8e1cc3YArcqpgHPM+saUbewotpVZ4AkVeNOfPhcrktclbzCWE9TGTyYkD46o8QEb0BuZ79yEYE7uy3njrObSHTAAAAP//AwCnC723w5oqxAAAAABJRU5ErkJggg==" rel="icon" type="image/png"/>
+ </head>
+ <body>
+  <!-- header logo start -->
+  <!--
+<table cellpadding="0" width="100%" cellspacing="0" border="0">
+	<tr>
+		<td style="width:80px;">
+			<a href="/kegg/pathway.html"><img align="middle" alt="KEGG" border="0" src="/Fig/bget/kegg3.gif" /></a>
+		</td>
+		<td style="vertical-align:middle;">
+			<font class="title3"><b>Autophagy - other - Reference pathway</b></font>
+		</td>
+		<td valign="bottom" align="right">
+		</td>
+	</tr>
+</table>
+-->
+  <h1 class="page-title">
+   <a href="https://www.genome.jp/kegg/pathway.html" target="_blank">
+    <img alt="KEGG" border="0" src="data: image/gif;base64,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"/>
+   </a>
+   Autophagy - other - Reference pathway
+  </h1>
+  <!-- header logo end -->
+  <!-- page navigation start -->
+  <div class="nav">
+   [
+   <a href="https://www.genome.jp/brite/query=04136&amp;htext=br08901.keg&amp;option=-a&amp;node_proc=br08901_org&amp;proc_enabled=map&amp;panel=collapse" id="navPathwayMenu" target="_blank">
+    Pathway menu
+   </a>
+   |
+   <a href="https://www.genome.jp/entry/pathway+map04136" id="navPathwayEntry" target="_blank">
+    Pathway entry
+   </a>
+   |
+   <a href="#description" id="descLink" target="_blank">
+    Show description
+   </a>
+   |
+   <a href="#" id="downloadImageLink" target="_blank">
+    Image file
+   </a>
+   |
+   <a href="https://www.genome.jp/kegg/document/help_pathway.html" target="_blank">
+    Help
+   </a>
+   ]
+   <div class="hidden" id="description">
+    Autophagy is a degradative pathway for the removal of cytoplasmic materials in eukaryotic cells, and is characterized by the formation of a double-membrane structure called the autophagosome, either in a housekeeping capacity or during stress and senescence. The process of autophagy could be divided into several stages: induction, vesicle nucleation, elongation and closure, and fusion and digestion. Most essential autophagic machineries are conserved throughout eukaryotes (see
+    <a href="https://www.genome.jp/pathway/map04140" target="_blank">
+     map04140
+    </a>
+    for animals and
+    <a href="https://www.genome.jp/pathway/map04138" target="_blank">
+     map04138
+    </a>
+    for fungi). This map is for other eukaryotes including plants and protists, where autophagy related genes (ATGs) play similar roles in the life cycle. However, autophagy has been relatively less studied in lower eukaryotes.
+   </div>
+   <!-- organism list start -->
+   <!-- organism list end -->
+  </div>
+  <!-- page navigation end -->
+  <!-- pathway image start -->
+  <div class="image-block" style="position:static;">
+   <img border="0" id="pathwayimage" src="ko04136.png" srcset="ko04136.png 1x" usemap="#mapdata" width="1052"/>
+   <map data-scale="1" id="mapdata" name="mapdata">
+    <area class="original" coords="358,716,4" data-coords="358,716,4" data-entry="C00350" href="https://www.genome.jp/entry/C00350" id="FD700FB1" shape="circle" target="_blank" title="C00350 (Phosphatidylethanolamine)"/>
+    <area class="original" coords="570,693,4" data-coords="570,693,4" data-entry="C00350" href="https://www.genome.jp/entry/C00350" id="D2703D0B" shape="circle" target="_blank" title="C00350 (Phosphatidylethanolamine)"/>
+    <area class="original" coords="520,423,4" data-coords="520,423,4" data-entry="C04549" href="https://www.genome.jp/entry/C04549" id="D270326B" shape="circle" target="_blank" title="C04549 (1-Phosphatidyl-1D-myo-inositol 3-phosphate)"/>
+    <area class="original" coords="435,423,4" data-coords="435,423,4" data-entry="C01194" href="https://www.genome.jp/entry/C01194" id="EB701984" shape="circle" target="_blank" title="C01194 (1-Phosphatidyl-D-myo-inositol)"/>
+    <area class="original" coords="190,94,236,111" data-coords="190,94,236,111" href="https://www.genome.jp/entry/K07204" id="27ACC331" shape="rect" target="_blank" title="K07204 (RAPTOR)"/>
+    <area class="original" coords="215,120,261,137" data-coords="215,120,261,137" href="https://www.genome.jp/entry/K07203" id="C8A40466" shape="rect" target="_blank" title="K07203 (MTOR)"/>
+    <area class="original" coords="241,146,287,163" data-coords="241,146,287,163" href="https://www.genome.jp/entry/K08266" id="6AB126AE" shape="rect" target="_blank" title="K08266 (MLST8)"/>
+    <area class="original" coords="371,93,417,110" data-coords="371,93,417,110" href="https://www.genome.jp/entry/K08269" id="1F1FCC0E" shape="rect" target="_blank" title="K08269 (ULK2)"/>
+    <area class="original" coords="371,155,417,172" data-coords="371,155,417,172" href="https://www.genome.jp/entry/K08331" id="5B919E7E" shape="rect" target="_blank" title="K08331 (ATG13)"/>
+    <area class="original" coords="472,155,518,172" data-coords="472,155,518,172" href="https://www.genome.jp/entry/K08330" id="DD94147E" shape="rect" target="_blank" title="K08330 (ATG11)"/>
+    <area class="original" coords="429,127,475,144" data-coords="429,127,475,144" href="https://www.genome.jp/entry/K19730" id="75AEF9E6" shape="rect" target="_blank" title="K19730 (ATG101)"/>
+    <area class="original" coords="215,203,261,220" data-coords="215,203,261,220" href="https://www.genome.jp/entry/K17606" id="14A37971" shape="rect" target="_blank" title="K17606 (IGBP1)"/>
+    <area class="original" coords="215,242,261,259" data-coords="215,242,261,259" href="https://www.genome.jp/entry/K04382" id="FBA68460" shape="rect" target="_blank" title="K04382 (PPP2C)"/>
+    <area class="original" coords="392,316,438,333" data-coords="392,316,438,333" href="https://www.genome.jp/entry/K08334" id="F398A16C" shape="rect" target="_blank" title="K08334 (BECN)"/>
+    <area class="original" coords="392,347,438,364" data-coords="392,347,438,364" href="https://www.genome.jp/entry/K08333" id="0C9BA3E8" shape="rect" target="_blank" title="K08333 (PIK3R4)"/>
+    <area class="original" coords="452,331,498,348" data-coords="452,331,498,348" href="https://www.genome.jp/entry/K00914" id="76BA0EA2" shape="rect" target="_blank" title="K00914 (PIK3C3)"/>
+    <area class="original" coords="591,189,637,206" data-coords="591,189,637,206" href="https://www.genome.jp/entry/K17907" id="CA998AD7" shape="rect" target="_blank" title="K17907 (ATG9)"/>
+    <area class="original" coords="561,221,607,238" data-coords="561,221,607,238" href="https://www.genome.jp/entry/K17906" id="028DFF96" shape="rect" target="_blank" title="K17906 (ATG2)"/>
+    <area class="original" coords="620,221,666,238" data-coords="620,221,666,238" href="https://www.genome.jp/entry/K17908" id="85AE61CD" shape="rect" target="_blank" title="K17908 (WIPI1_2)"/>
+    <area class="original" coords="282,630,328,647" data-coords="282,630,328,647" href="https://www.genome.jp/entry/K08343" id="5B93A9F5" shape="rect" target="_blank" title="K08343 (ATG3)"/>
+    <area class="original" coords="506,684,552,701" data-coords="506,684,552,701" href="https://www.genome.jp/entry/K08341" id="BEA5C7E8" shape="rect" target="_blank" title="K08341 (GABARAP)"/>
+    <area class="original" coords="93,733,139,750" data-coords="93,733,139,750" href="https://www.genome.jp/entry/K08342" id="1FC240BC" shape="rect" target="_blank" title="K08342 (ATG4)"/>
+    <area class="original" coords="612,540,658,557" data-coords="612,540,658,557" href="https://www.genome.jp/entry/K17890" id="69ACE05B" shape="rect" target="_blank" title="K17890 (ATG16L1)"/>
+    <area class="original" coords="50,540,99,557" data-coords="50,540,99,557" href="https://www.genome.jp/entry/K08336" id="E383E0F1" shape="rect" target="_blank" title="K08336 (ATG12)"/>
+    <area class="original" coords="225,588,271,605" data-coords="225,588,271,605" href="https://www.genome.jp/entry/K17888" id="95A7FBCA" shape="rect" target="_blank" title="K17888 (ATG10L)"/>
+    <area class="original" coords="164,610,210,627" data-coords="164,610,210,627" href="https://www.genome.jp/entry/K08337" id="508A0B1E" shape="rect" target="_blank" title="K08337 (ATG7)"/>
+    <area class="original" coords="365,549,411,566" data-coords="365,549,411,566" href="https://www.genome.jp/entry/K08336" id="B792759A" shape="rect" target="_blank" title="K08336 (ATG12)"/>
+    <area class="original" coords="365,532,411,549" data-coords="365,532,411,549" href="https://www.genome.jp/entry/K08339" id="0890781D" shape="rect" target="_blank" title="K08339 (ATG5)"/>
+    <area class="original" coords="521,540,567,557" data-coords="521,540,567,557" href="https://www.genome.jp/entry/K08336" id="E7AF6CC7" shape="rect" target="_blank" title="K08336 (ATG12)"/>
+    <area class="original" coords="567,540,613,557" data-coords="567,540,613,557" href="https://www.genome.jp/entry/K08339" id="DA96629A" shape="rect" target="_blank" title="K08339 (ATG5)"/>
+    <area class="original" coords="278,577,324,594" data-coords="278,577,324,594" href="https://www.genome.jp/entry/K08339" id="F7981587" shape="rect" target="_blank" title="K08339 (ATG5)"/>
+    <area class="original" coords="419,577,465,594" data-coords="419,577,465,594" href="https://www.genome.jp/entry/K17890" id="79B0EDE6" shape="rect" target="_blank" title="K17890 (ATG16L1)"/>
+    <area class="original" coords="50,685,96,702" data-coords="50,685,96,702" href="https://www.genome.jp/entry/K08341" id="49FBCD73" shape="rect" target="_blank" title="K08341 (GABARAP)"/>
+    <area class="original" coords="40,45,240,70" data-coords="40,45,240,70" data-entry="map04136" href="https://www.genome.jp/entry/map04136" id="37B2B5C4" shape="rect" target="_blank" title="map04136: Autophagy - other"/>
+   </map>
+   <map data-scale="1" id="module_mapdata" name="module_mapdata">
+   </map>
+  </div>
+  <!-- pathway image end -->
+  <!-- control panel start -->
+  <div id="controlPanel">
+   <div class="controller">
+    <div class="feature option">
+     <h5>
+      Option
+     </h5>
+     <div>
+      <div class="row scale">
+       <span class="title">
+        Scale:
+       </span>
+       <span class="content">
+        <input max="1" min="0.1" step="0.1" type="range" value="1"/>
+        <span class="label">
+         100%
+        </span>
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="feature search">
+     <h5>
+      Search
+     </h5>
+     <div>
+      <div class="row query">
+       <form>
+        <input autocomplete="off" name="query" style="width:130px;" type="text" value=""/>
+        <input type="submit" value="Go"/>
+        <span class="ui-icon button ui-icon-close clear-query hidden">
+        </span>
+       </form>
+      </div>
+      <div class="row result">
+      </div>
+     </div>
+    </div>
+    <div class="feature search-pathway">
+     <h5>
+      ID search
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <form>
+       <div class="row" style="display:grid; grid-template-columns:135px 1fr; column-gap:5px;">
+        <div>
+         <textarea class="query" rows="2" style="width:130px; resize:none;"></textarea>
+        </div>
+        <div>
+         <input class="submit" type="submit" value="Go"/>
+         <span class="ui-icon button ui-icon-close clear-query hidden">
+         </span>
+        </div>
+       </div>
+      </form>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="feature color-pathway">
+     <h5>
+      Color
+      <span class="ui-icon ui-icon-plus">
+      </span>
+     </h5>
+     <div>
+      <div class="row personal hidden">
+       <ul class="mappers">
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+   <button class="close">
+    <img src="/Fig/left_triangle_12x12.png"/>
+   </button>
+   <button class="open">
+    <img src="/Fig/right_triangle_12x12.png"/>
+   </button>
+  </div>
+  <!-- control panel end -->
+  <form action="/kegg-bin/download" id="downloadForm" method="post">
+   <input name="name" type="hidden" value="map04136.png"/>
+   <input name="content" type="hidden"/>
+   <input name="decode" type="hidden" value="base64"/>
+  </form>
+  <div id="waiting-circle">
+   <img src="/Fig/waiting-circle-small.gif"/>
+  </div>
+  <!-- pathway image url start -->
+  <form class="imageset" data-name="">
+   <input data-situation="1x" data-src="/kegg/pathway/map/map04136.png" name="image_normal" type="hidden" value="/kegg/pathway/map/map04136.png 1x"/>
+  </form>
+  <!-- pathway image url end -->
+ </body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>map00220</title>
+<style type="text/css">
+<!--
+area {cursor: pointer;}
+-->
+</style>
+<script type="text/javascript">
+<!--
+function showInfo(info) {
+	obj = document.getElementById("result");
+	obj.innerHTML = "<div style='cursor: pointer; position: absolute; right: 5px; color: #000;' onclick='javascript: document.getElementById(\"result\").style.display = \"none\";' title='close'>X</div>" + info;
+	obj.style.top = document.body.scrollTop;
+	obj.style.left = document.body.scrollLeft;
+	obj.style.display = "";
+}
+//->
+</script>
+</head>
+<body>
+<map name="map00220">
+<area shape='circle' coords='671,133,4' onmouseover='javascript: showInfo("<ul><li style=\"color: #0f0;\">Molecular<ul><li>C00049: <br>M134T55_1 | Aspartic acid,<br>M134T56 | Aspartic acid</li></ul></li></ul>");' />
+<area shape='circle' coords='937,198,4' onmouseover='javascript: showInfo("<ul><li style=\"color: #0f0;\">Molecular<ul><li>C00062: <br>M175T51_2 | Arginine,<br>M175T74 | Arginine,<br>M175T94 | Arginine</li></ul></li></ul>");' />
+<area shape='circle' coords='180,151,4' onmouseover='javascript: showInfo("<ul><li style=\"color: #0f0;\">Molecular<ul><li>C00064: <br>M147T53 | Glutamine</li></ul></li></ul>");' />
+<area shape='circle' coords='180,363,4' onmouseover='javascript: showInfo("<ul><li style=\"color: #0f0;\">Molecular<ul><li>C00025: <br>M148T53_1 | Glutamic acid,<br>M148T53_2 | Glutamic acid</li></ul></li></ul>");' />
+</map>
+<img src='./map00220.png' usemap='#map00220' />
+<div id='result' style='position: absolute; width: 50%; border: 1px solid #000; background-color: #fff; filter: alpha(opacity=95); opacity: 0.95; font-size: 12px; padding-right: 20px; display: none;' onmouseover="javascript: this.style.filter = 'alpha(opacity=100)'; this.style.opacity = 1;" onmouseout="javascript: this.style.filter = 'alpha(opacity=95)'; this.style.opacity = 0.95;"></div>
+</body></html>
